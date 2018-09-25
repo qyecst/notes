@@ -1,0 +1,7 @@
+基于web的IDE
+  tornado/websocket用于通信
+  xterm.js/python-paramiko用于模拟终端交互
+  layui/bootstrap/vue前端框架
+  monaco editor基于web的编辑器
+  python-pdb用于模拟debug断点
+  # 万事具备，就差代码了.jpg
