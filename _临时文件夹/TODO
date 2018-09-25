@@ -4,4 +4,17 @@
   layui/bootstrap/vue前端框架
   monaco editor基于web的编辑器
   python-pdb用于模拟debug断点
-  # 万事具备，就差代码了.jpg
+  zTree/layui-eletree模拟文件树结构
+  sqlite/json文件保存配置
+  # 代码在写了.jpg
+
+修改笔记格式
+  归类/裁剪
+  名称
+
+修改网站结构
+  bootstrap/vue
+  缩减页面模板
+  sanic/flask
+  url短链接/json格式/文件存储
+  db???
