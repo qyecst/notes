@@ -1,6 +1,20 @@
-### 准备
+<!--
+{
+    "title": "postfix+dovecot邮件服务相关",
+    "create": "2018-05-16 14:30:06",
+    "modify": "2018-12-02 15:46:43",
+    "tag": [
+        "postfix",
+        "dovecot",
+        "email"
+    ],
+    "info": [
+        "测试不完全成功//todo"
+    ]
+}
+-->
 
-#### 修改主机名
+## 修改主机名
 
 ```bash
 hostnamectl set-hostname <mail.example.com>
@@ -8,19 +22,19 @@ hostnamectl set-hostname <mail.example.com>
 hostnamectl set-hostname <example.com>
 ```
 
-#### 添加hosts记录
+## 添加hosts记录
 
-```bash
+```txt
 xxx.xx.xxx.xx <mail.example.com>
 #或者
 xxx.xx.xxx.xx <example.com>
 ```
 
-#### DNS设置
+## DNS设置
 
 添加MX记录指向mail.example.com，添加A，A-mail记录指向服务器IP，添加TXT记录做SPF反垃圾邮件设置
 
-```conf
+```txt
 类型            主机记录            记录值                优先级             TTL
 MX               @          <mail.example.com>            10               600
 A              mail            xxx.xx.xxx.xx              --               600
@@ -33,7 +47,7 @@ A                @               xxx.xx.xxx.xx            --               600
 TXT              @        v=spf1 ipv4:xxx.xx.xxx.xx       --               600
 ```
 
-### Postfix设置
+## Postfix设置
 
 配置文件`/etc/postfix/main.cf`
 
@@ -77,10 +91,10 @@ tls_random_source = dev:/dev/urandom
 配置文件`/etc/poostfix/master.cf`
 
 ```conf
-    # service type  private unpriv  chroot  wakeup  maxproc command + args
-    #               (yes)   (yes)   (yes)   (never) (100)
-    # ==========================================================================
-    smtp      inet  n       -       n       -       -       smtpd
+# service type  private unpriv  chroot  wakeup  maxproc command + args
+#               (yes)   (yes)   (yes)   (never) (100)
+# ==========================================================================
+smtp      inet  n       -       n       -       -       smtpd
 
 submission     inet  n       -       n       -       -       smtpd
   -o syslog_name=postfix/submission
@@ -94,32 +108,32 @@ smtps     inet  n       -       n       -       -       smtpd
   -o milter_macro_daemon_name=ORIGINATING
 ```
 
-### Dovecot设置
+## Dovecot设置
 
 配置文件`/etc/dovecot/conf.d/10-master.conf`
 
 ```conf
-    # Postfix smtp-auth
-    unix_listener /var/spool/postfix/private/auth {
-    mode = 0660
-    user = postfix
-    group = postfix
-    }
+# Postfix smtp-auth
+unix_listener /var/spool/postfix/private/auth {
+mode = 0660
+user = postfix
+group = postfix
+}
 ```
 
 配置文件`/etc/dovecot/conf.d/10-auth.conf`
 
 ```conf
-    # Space separated list of wanted authentication mechanisms:
-    #   plain login digest-md5 cram-md5 ntlm rpa apop anonymous gssapi otp skey
-    #   gss-spnego
-    # NOTE: See also disable_plaintext_auth setting.
-    auth_mechanisms = plain login
+# Space separated list of wanted authentication mechanisms:
+#   plain login digest-md5 cram-md5 ntlm rpa apop anonymous gssapi otp skey
+#   gss-spnego
+# NOTE: See also disable_plaintext_auth setting.
+auth_mechanisms = plain login
 ```
 
 配置文件`/etc/dovecot/conf.d/10-mail.conf`
 
 ```conf
-    #mail_location =
-    mail_location = maildir:~/mail
+#mail_location =
+mail_location = maildir:~/mail
 ```

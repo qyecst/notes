@@ -1,8 +1,16 @@
-[info]: # ({"title":"思科相关的笔记", "create":"2018-05-12 19:17:53", "modify":"2018-08-22 19:12:28", "category":"笔记", "tag_list":["cisco", "网络", "思科", "交换机", "路由器"], "info_list":[]})
-
-思科相关的笔记，~~真是令人头大，学习使我快乐~~
-
-[preview]: # (end preview)
+<!--
+{
+    "title": "cisco相关",
+    "create": "2018-05-12 19:17:53",
+    "modify": "2018-12-02 19:40:55",
+    "tag": [
+        "switch",
+        "router",
+        "cisco"
+    ],
+    "info": []
+}
+-->
 
 ## 网络基础
 
@@ -21,7 +29,7 @@
 - ISO/OSI参考模型是在其协议被开发出来之前设计出来的，它并不基于某个特定的协议集而设计，所以具有通用性，但在协议实现方面存在不足
 
 OSI参考模型 & TCP/IP参考模型：  
-![参考模型](_图片文件夹/_Cisco相关的笔记/参考模型.png)
+![参考模型](_pic/ciscoxg/参考模型.png)
 
 ### OSI模型
 
@@ -66,7 +74,7 @@ OSI参考模型 & TCP/IP参考模型：
 
 传输协议：
 
-![传输协议](_图片文件夹/_Cisco相关的笔记/传输协议.png)
+![传输协议](_pic/ciscoxg/传输协议.png)
 
 会话层：
 
@@ -113,14 +121,14 @@ OSI参考模型 & TCP/IP参考模型：
 
 数据封装与解封装：
 
-![数据封装与解封装](_图片文件夹/_Cisco相关的笔记/数据封装与解封装.png)
+![数据封装与解封装](_pic/ciscoxg/数据封装与解封装.png)
 
 数据结构：
 
 - 数据链路层给数据添加帧头（包含源/目的mac地址等），给数据尾添加CRC校验
 - 串行线路不使用mac地址，添加PPP或HDLC等串行链路协议头
 
-![数据](_图片文件夹/_Cisco相关的笔记/数据.png)
+![数据](_pic/ciscoxg/数据.png)
 
 IP地址：
 
@@ -255,15 +263,15 @@ IP地址：
 
 IP数据包：
 
-![ip数据包格式](_图片文件夹/_Cisco相关的笔记/ip数据包格式.png)
+![ip数据包格式](_pic/ciscoxg/ip数据包格式.png)
 
 TCP数据段：
 
-![tcp数据段格式](_图片文件夹/_Cisco相关的笔记/tcp数据段格式.png)
+![tcp数据段格式](_pic/ciscoxg/tcp数据段格式.png)
 
 UDP数据报：
 
-![udp数据报格式](_图片文件夹/_Cisco相关的笔记/udp数据报格式.png)
+![udp数据报格式](_pic/ciscoxg/udp数据报格式.png)
 
 伪首部：
 
@@ -271,7 +279,7 @@ UDP数据报：
 - 伪首部并非TCP&UDP数据报中实际的有效成分。伪首部是一个虚拟的数据结构，其中的信息是从数据报所在IP分组头的分组头中提取的，既不向下传送也不向上递交，而仅仅是为计算校验和
 - **TCP的伪首部与UDP类似，只是协议号为6**
 
-![udp数据报伪首部](_图片文件夹/_Cisco相关的笔记/udp数据报伪首部.png)
+![udp数据报伪首部](_pic/ciscoxg/udp数据报伪首部.png)
 
 TCP握手挥手流量控制：
 
@@ -287,7 +295,7 @@ TCP握手挥手流量控制：
 - CLOSE_WAIT：表示在等待关闭。当对方发送FIN报文，己方回应ACK报文，进入CLOSE_WAIT状态。若己方无数据传送，发送FIN报文给对方，即关闭连接，若有，则先传送数据
 - LAST_ACK：被动关闭一方发送FIN报文后，最后等待对方的ACK报文。当收到ACK报文后，即可以进入到CLOSED可用状态
 
-![tcp握手挥手流控](_图片文件夹/_Cisco相关的笔记/tcp握手挥手流控.png)
+![tcp握手挥手流控](_pic/ciscoxg/tcp握手挥手流控.png)
 
 ## 路由器基础
 
@@ -632,7 +640,7 @@ SW# show port-security int f0/0 // 查看某个接入端口的安全规则
 
 DHCP欺骗：
 
-![dhcp欺骗](_图片文件夹/_Cisco相关的笔记/dhcp欺骗.png)
+![dhcp欺骗](_pic/ciscoxg/dhcp欺骗.png)
 
 R1运行了DHCP服务，R2也运行了DHCP服务，R1-2和PC1-2连接在交换机，现在如果让两台pc自动获取IP，则可能随机从R1或R2上获取到IP地址（看谁先应答），如果此时R1所在线路出现故障，那么全部的PC将获得R2上DHCP地址池中的地址，如果连接R2的线路存在安全隐患，就有可能让其他人使用这种方法在这条线路上搭建一个DHCP服务器来欺骗正常的PC获取到他指定的IP
 
@@ -716,7 +724,7 @@ R# clear arp-cache // 清除arp表
 
 路由优先级：
 
-![路由优先级](_图片文件夹/_Cisco相关的笔记/路由优先级.png)
+![路由优先级](_pic/ciscoxg/路由优先级.png)
 
 ### 借用网络地址
 
@@ -778,11 +786,11 @@ Ping包：
 - 后发送arp广播的方式请求目的的mac地址，单播响应，即源广播请求，目的单播回复
 - 获取目的mac地址后ping封包成功，ping包发送成功
 
-![Ping包](_图片文件夹/_Cisco相关的笔记/ping包.png)
+![Ping包](_pic/ciscoxg/ping包.png)
 
 ARP包：
 
-![ARP包](_图片文件夹/_Cisco相关的笔记/arp包.png)
+![ARP包](_pic/ciscoxg/arp包.png)
 
 代理ARP：
 
@@ -792,7 +800,7 @@ ARP包：
 - 若后设备关闭arp转发则使得前设备解析失败
 - arp后到优先，故而代理arp可能造成次优选路
 
-![arp次优](_图片文件夹/_Cisco相关的笔记/arp次优.png)
+![arp次优](_pic/ciscoxg/arp次优.png)
 
 ## RIP协议
 
@@ -812,7 +820,7 @@ ARP包：
 
 RIP传递：
 
-![rip传递](_图片文件夹/_Cisco相关的笔记/rip传递.png)
+![rip传递](_pic/ciscoxg/rip传递.png)
 
 RIP v1：
 
@@ -834,7 +842,7 @@ RIP v1：
     - 不传递掩码则传递为12.1.1.0，无法判断网段还是主机，则使用A类掩码成12.0.0.0网段
     - 范围变大，精确匹配困难
     - 下述拓扑产生的路由传递将不能达到预期效果
-    - ![ripv1缺点](_图片文件夹/_Cisco相关的笔记/ripv1缺点.png)
+    - ![ripv1缺点](_pic/ciscoxg/ripv1缺点.png)
 
 RIP v2：
 
@@ -864,7 +872,7 @@ RIP v1 & RIP v2：
 
 R1收到R2的关于1.1.1.1的路由，一周期后又将1.1.1.1发给R2，后R2又发给R1，造成环路  
 
-![rip环路](_图片文件夹/_Cisco相关的笔记/rip环路.png)
+![rip环路](_pic/ciscoxg/rip环路.png)
 
 防环：
 
@@ -1051,11 +1059,11 @@ R2(config-if)# ip rip receive version 1 2
 
 OSPF传递路由：
 
-![ospf传递路由](_图片文件夹/_Cisco相关的笔记/ospf传递路由.png)
+![ospf传递路由](_pic/ciscoxg/ospf传递路由.png)
 
 OSPF包格式：
 
-![ospf包格式](_图片文件夹/_Cisco相关的笔记/ospf包格式.png)
+![ospf包格式](_pic/ciscoxg/ospf包格式.png)
 
 ### ospf特点
 
@@ -1090,7 +1098,7 @@ OSPF包格式：
 - Exchange：开始交换阶段，路由器将本地的"路由状态数据库(LSDB)"用"数据库描述(DBD)"报文来描述，然后发给邻路由。这个阶段中的路由收到不在其数据库中的有关链路的信息，那么在下一个阶段中将请求对方发送该路由条目的完整信息
 - Loading：加载阶段，路由器通过发送"链路状态请求(LSR)"，来向邻居请求一些路由条目的详细信息。邻居则会使用"链路状态更新包(LSU)"来回复LSR请求，收到邻居发回的LSU后，再发送LSAck向发送LSU的路由进行确认
 - FULL：完全邻接状态，Loading结束后，路由器之间就变成了"Full adjacency"
-- ![ospf状态](_图片文件夹/_Cisco相关的笔记/ospf状态.png)
+- ![ospf状态](_pic/ciscoxg/ospf状态.png)
 
 ### ospf常用操作
 
@@ -1197,7 +1205,7 @@ R(config-router)# default-information originate always // 始终对外发布默�
 
 包结构：
 
-![eigrp包格式](_图片文件夹/_Cisco相关的笔记/eigrp包格式.png)
+![eigrp包格式](_pic/ciscoxg/eigrp包格式.png)
 
 邻居建立：
 
@@ -1237,7 +1245,7 @@ DUAL（Diffusing Update Algorithm）弥散算法：
 - 从A到E，A认为C链路好，A-->C-->E
 - 从C到E，C认为A-B-E链路好，C-->A-->B-->E
 - 数据从A发往C后又回到A，形成环路
-- ![eigrp环路](_图片文件夹/_Cisco相关的笔记/eigrp环路.png)
+- ![eigrp环路](_pic/ciscoxg/eigrp环路.png)
 
 ### eigrp路由条目
 
@@ -1250,7 +1258,7 @@ DUAL（Diffusing Update Algorithm）弥散算法：
 - 通告距离为下一跳到目的网络的开销，即总开销减去其到下一跳的开销
 - 最优的路由条目进入路由表，其他在拓扑表中存在、不是最优路由条目的路由成为可行后继路由器
 - 可行条件：能成为可行后继路由器的条件（非最优条目的通告距离**必须**小于最优条目的可行距离[防环]）
-- ![eigrp路由](_图片文件夹/_Cisco相关的笔记/eigrp路由.png)
+- ![eigrp路由](_pic/ciscoxg/eigrp路由.png)
 
 ### eigrp报文
 
@@ -1268,7 +1276,7 @@ DUAL（Diffusing Update Algorithm）弥散算法：
 
 邻居建立：
 
-- ![邻居建立](_图片文件夹/_Cisco相关的笔记/邻居建立.png)
+- ![邻居建立](_pic/ciscoxg/邻居建立.png)
 - 路由没了发送query，有则reply，无则发16个，超时后删除
 
 邻居表：
@@ -1442,7 +1450,7 @@ R(config-if)# ip bandwidth-percent eigrp 100 5
 
 ACL工作流程：
 
-![acl工作流程](_图片文件夹/_Cisco相关的笔记/acl工作流程.png)
+![acl工作流程](_pic/ciscoxg/acl工作流程.png)
 
 ### acl常用操作
 
@@ -1587,7 +1595,7 @@ R2(config-if)# ip access-group in-acl in //在R2的s0/0接口进入方向做评�
 
 反射ACL：
 
-![反射acl](_图片文件夹/_Cisco相关的笔记/反射acl.png)
+![反射acl](_pic/ciscoxg/反射acl.png)
 
 #### 配置动态acl
 
@@ -1621,7 +1629,7 @@ R2(config-if)# ip access-group 100 in // 在路由的端口上调用这个ACL
 
 动态ACL：
 
-![动态ACL](_图片文件夹/_Cisco相关的笔记/动态acl.png)
+![动态ACL](_pic/ciscoxg/动态acl.png)
 
 #### 配置动基于时间的acl
 
@@ -1706,11 +1714,11 @@ R2# show access-lists // 查看，因为现在时间不符合，这个条目没�
 
 vlan区分方式：
 
-![vlan区分方式](_图片文件夹/_Cisco相关的笔记/vlan区分方式.png)
+![vlan区分方式](_pic/ciscoxg/vlan区分方式.png)
 
 802dot1q包格式：
 
-![802dot1q包格式](_图片文件夹/_Cisco相关的笔记/dot1q包格式.png)
+![802dot1q包格式](_pic/ciscoxg/dot1q包格式.png)
 
 ### DTP协议
 
@@ -1795,7 +1803,7 @@ SW(config-if)# switchport // 再转换成2层接口
 
 VLAN配置：（数据从一个接口进，路由还是从此接口出，则称为单臂路由）
 
-![vlan配置](_图片文件夹/_Cisco相关的笔记/vlan配置.png)
+![vlan配置](_pic/ciscoxg/vlan配置.png)
 
 ```switch/router
 R1:
@@ -2061,7 +2069,7 @@ SW(config)# vtp version {1|2}
 
 bridge_id格式：
 
-![bridge_id格式](_图片文件夹/_Cisco相关的笔记/bridge_id格式.png)
+![bridge_id格式](_pic/ciscoxg/bridge_id格式.png)
 
 ### BPDU格式
 
@@ -2080,7 +2088,7 @@ bridge_id格式：
 
 bpdu格式：
 
-![bpdu格式](_图片文件夹/_Cisco相关的笔记/bpdu格式.png)
+![bpdu格式](_pic/ciscoxg/bpdu格式.png)
 
 ### stp链路断线问题
 
@@ -2102,7 +2110,7 @@ bpdu格式：
 
 stp断线：
 
-![stp断线](_图片文件夹/_Cisco相关的笔记/stp断线.png)
+![stp断线](_pic/ciscoxg/stp断线.png)
 
 ```switch
 SW# show spanning-tree // 查看生成树信息（所有的valn）
@@ -2120,7 +2128,7 @@ SW# show spanning-tree vlan 1 // 查看生成树信息（vlan 1）
 
 stp结构：
 
-![stp结构](_图片文件夹/_Cisco相关的笔记/stp结构.png)
+![stp结构](_pic/ciscoxg/stp结构.png)
 
 ```switch
 SW(config)# spanning-tree mode <生成树类型> // 即相当于启用
@@ -2173,7 +2181,7 @@ SW(config)# spanning-tree vlan <vlan_num> {priority|forward-time|max-age|hello-t
 
 dhcp工作流程：
 
-![dhcp工作流程](_图片文件夹/_Cisco相关的笔记/dhcp工作流程.png)
+![dhcp工作流程](_pic/ciscoxg/dhcp工作流程.png)
 
 ### dhcp常用操作
 
@@ -2199,7 +2207,7 @@ R(config)# ip dhcp excluded-address 192.168.1.2 192.168.1.9 // 不下发192.168.
 
 dhcp中继：R1的f1/0连接到一台vpcs，R1是DHCP中继服务器，R2是DHCP服务器，R1负责将vpcs发来的DHCP广播请求以单播的形式发给DHCP服务器R2
 
-![dhcp中继](_图片文件夹/_Cisco相关的笔记/dhcp中继.png)
+![dhcp中继](_pic/ciscoxg/dhcp中继.png)
 
 ```router
 // R1配置
@@ -2314,7 +2322,7 @@ PPP特点：
 
 ppp体系架构：
 
-![ppp体系架构](_图片文件夹/_Cisco相关的笔记/ppp体系架构.png)
+![ppp体系架构](_pic/ciscoxg/ppp体系架构.png)
 
 ### 会话建立过程
 
@@ -2329,7 +2337,7 @@ ppp体系架构：
     - 两次握手协议，采用明文传输方式传输用户口令
     - 首先被验证方主动发起验证请求，将本地配置的用户名和密码用明文的方式发送给验证方，验证方接收到验证请求后检查此用户名和密码是否正确（在验证方的数据库中也配置有此用户名和密码），正确就发回接受报文，错误就发送拒绝报文
     - 这种验证方式是采用明文传输，很容易被破解
-    - ![pap双向握手](_图片文件夹/_Cisco相关的笔记/pap双向握手.png)
+    - ![pap双向握手](_pic/ciscoxg/pap双向握手.png)
 - CHAP（Challenge Handshake Authentication Protocol，挑战握手验证协议）
     - 三次握手协议，它只在网络上传输用户名，密码并不在网络上传输
     -在PPP链路建立阶段完成后（R1作为被验证方拨入），验证方R2主动发起验证挑战"Challenge"，挑战报文中"01"是序列号；R2上可能有多个拨入请求，"ID"用来识别是哪个拨入者发起的挑战；"Random"是一个随机数；"R2"是发起挑战路由器的名字
@@ -2337,7 +2345,7 @@ ppp体系架构：
     - 生成hash之后，再将这个hash值、验证方R2发送过来的ID号以及本路由的名称R1，发回给验证方R2。其中报文的序列号是"02"，"ID"是R2发送过来的ID不变，"hash"是R1计算后得到的哈希值
     - R2接收到这个报文后，利用报文中的ID值找到储存在本地数据库中的随机数，并且根据发送过来的报文中路由器的名称(R1)找到本地数据库对应这个名称的密码，然后利用ID、随机数、R1对应的密码使用MD5算法生成一个hash值，最后用这个hash值与R1发送过来的hash比较，相同则验证通过，发回序号是"03"的确认报文，如果不相同则验证失败，发回序号是"04"的验证失败报文
     - 只要双方配置相同的验证密码，即可完成验证，并且这个密码是不会在链路上传输的，传输的只是一个随机数、一个ID值、路由器的名称和发回的hash值
-    - ![chap三次握手](_图片文件夹/_Cisco相关的笔记/chap三次握手.png)
+    - ![chap三次握手](_pic/ciscoxg/chap三次握手.png)
 
 ### ppp常用操作
 
@@ -2503,7 +2511,7 @@ R# show ip nat translations // 查看NAT转换表
 
 hsrp结构：
 
-![hsrp结构](_图片文件夹/_Cisco相关的笔记/hsrp结构.png)
+![hsrp结构](_pic/ciscoxg/hsrp结构.png)
 
 ```router
 // R1&R2:
@@ -2691,7 +2699,7 @@ R1# show ipv6 route // 查看IPv6路由表
 
 ipv6overipv4：
 
-![ipv6overipv4](_图片文件夹/_Cisco相关的笔记/ipv6overipv4.png)
+![ipv6overipv4](_pic/ciscoxg/ipv6overipv4.png)
 
 ```router
 R1(config)# ipv6 unicast-routing // 开启IPv6路由支持
@@ -2734,7 +2742,7 @@ R3(config)# ipv6 route ::/0 2008:13:13:13::1 // 配置IPv6默认路由，指向R
 
 tunnel：
 
-![tunnel](_图片文件夹/_Cisco相关的笔记/tunnel.png)
+![tunnel](_pic/ciscoxg/tunnel.png)
 
 ```router
 // R1:
@@ -2770,7 +2778,7 @@ R1(config)# ipv6 route 3001::1/64 tunnel 0 // R2则为ipv6 route 1001::1/64 tunn
     - DLCI是源设备和目的设备之间标识逻辑电路的一个数据值，该数据值只具有本地意义
     - 不同DTE设备上的DLCI号可以相同，但在同一台DTE设备上不能用相同的DLCI号来标识到不同的连接
     - DLCI号的范围是0-1023，其中0-15以及1008-1023被保留用作特殊用途，所以用户可以配置的DLCI号为16-1007
-    - ![dlci](_图片文件夹/_Cisco相关的笔记/21_00_dlci.png)
+    - ![dlci](_pic/ciscoxg/21_00_dlci.png)
 - LMI（Local Management Interface，本地管理接口）
     - LMI是用户端和帧中继交换机之间的信令标准，负责管理设备之间的连接，维护设备的状态
     - LMI被用来获知路由器被分配了哪些DLCI，确定PVC的操作状态，有哪些可用的PVC，另外还用来发送维持分组，确保PVC处于激活状态
@@ -2785,7 +2793,7 @@ R1(config)# ipv6 route 3001::1/64 tunnel 0 // R2则为ipv6 route 1001::1/64 tunn
 
 物理专线和帧中继虚电路：
 
-![物理专线和帧中继虚电路](_图片文件夹/_Cisco相关的笔记/物理专线和帧中继虚电路.png)
+![物理专线和帧中继虚电路](_pic/ciscoxg/物理专线和帧中继虚电路.png)
 
 ### 帧中继运行方式
 
@@ -2796,14 +2804,14 @@ R1(config)# ipv6 route 3001::1/64 tunnel 0 // R2则为ipv6 route 1001::1/64 tunn
         - 地址：地址字段2个字节中包含了DLCI号（帧中继的帧中只有一个DLCI号，即去往的目的地的DLCI号，2个字节中的10个比特用来储存这个DLCI号）,拥塞控制（Congestion Control）占3比特，其中包括1比特的FECN位，1比特的BECN位和1比特的DE位,除此之外地址域中还包含3个比特的其他值
         - 数据：是一个可变长的字段，包含了封装的上层协议数据
         - 帧效验序列：用来保证传输数据的完整性
-        - ![帧中继帧格式](_图片文件夹/_Cisco相关的笔记/帧中继帧格式.png)
+        - ![帧中继帧格式](_pic/ciscoxg/帧中继帧格式.png)
 - 帧中继中的帧转发方式
     - 假设R1要将数据发往R3，R1封装DLCI号103，将封装好的帧发往帧中继交换机FR1。根据FR1上管理员的配置，FR1知道如果从接口1接收到DLCI号为103的帧，应该将DLCI号修改成112并从接口3发出。此时帧到达FR3，FR3也根据配置得知，从自己的1接口接收到的DLCI号为112的帧，应该将DLCI号修改成301，并从3号接口发出。此时R3接收到FR3发过来的帧中继帧，解封装后交给上层处理
     - 只要R1封装DLCI号103的帧，就能将数据发往R3，帧中继网云使用DLCI号103和DLCI号301在R1和R3之间建立了一条永久虚电路（PVC），同理R1到R4可以封装104，R4到R1可以封装401
-    - ![帧中继转发](_图片文件夹/_Cisco相关的笔记/帧中继转发.png)
+    - ![帧中继转发](_pic/ciscoxg/帧中继转发.png)
 - 帧中继交换表
     - 在图中的帧中继网络中，FR1-3三台帧中继交换机上都维护着一个帧中继交换表
-    - ![帧中继交换表](_图片文件夹/_Cisco相关的笔记/帧中继交换表.png)
+    - ![帧中继交换表](_pic/ciscoxg/帧中继交换表.png)
 
 ### 帧中继寻址方式
 
@@ -2817,13 +2825,13 @@ R1(config)# ipv6 route 3001::1/64 tunnel 0 // R2则为ipv6 route 1001::1/64 tunn
 - 最后R1继续发送维持消息，默认10秒一次，此维持消息可以验证帧中继交换机是否处于激活状态
 - 反向ARP默认的发送时间是60秒
 - 同理R3和R4也可以使用相同的方法获得对方的IP地址和对应的DLCI号
-- ![帧中继寻址](_图片文件夹/_Cisco相关的笔记/帧中继寻址.png)
+- ![帧中继寻址](_pic/ciscoxg/帧中继寻址.png)
 
 ### 帧中继水平分隔潜在问题
 
 - 在这种星型拓扑结构中R1和R2以及R3通过虚电路相连，R2和R3之间没有建立虚电路，R1就像以太网中的一个Hub，R2或R3将路由信息发给R1，因为水平分隔的原因，R1不会将从一个接口接收到的路由信息再从这个接口发回，导致R1上面有所有分支的路由信息，而分支路由间无法学习到路由信息
 - 解决这一问题的方法是关闭水平分隔，或者使用多个点到点子接口
-- ![帧中继水平分隔](_图片文件夹/_Cisco相关的笔记/帧中继水平分隔.png)
+- ![帧中继水平分隔](_pic/ciscoxg/帧中继水平分隔.png)
 
 ### 帧中继常用操作
 
@@ -2831,7 +2839,7 @@ R1(config)# ipv6 route 3001::1/64 tunnel 0 // R2则为ipv6 route 1001::1/64 tunn
 
 帧中继配置：将R2配置成帧中继交换机，用来模拟帧中继网云，R1、R3、R4是DTE端的路由器，配置帧中继封装
 
-![帧中继配置](_图片文件夹/_Cisco相关的笔记/帧中继配置.png)
+![帧中继配置](_pic/ciscoxg/帧中继配置.png)
 
 ```router
 // R2
@@ -2939,7 +2947,7 @@ R3(config-if)#frame-relay map ip 123.1.1.4 304 broadcast ietf
 
 rip_over帧中继配置：R2被配置成帧中继交换机，其中只有两条虚电路R1-R3和R1-R4，R1 s0/0的IP为123.1.1.1，R3 s0/1的IP为123.1.1.3，R4 s0/2的IP为123.1.1.4，它们上面各有一个回环接口，这些接口都被发布到RIP协议中
 
-![rip_over帧中继配置](_图片文件夹/_Cisco相关的笔记/rip_over帧中继配置.png)
+![rip_over帧中继配置](_pic/ciscoxg/rip_over帧中继配置.png)
 
 ```router
 // R2配置成帧中继交换机
@@ -3026,7 +3034,7 @@ R1(config-if)# ip split-horizon // 打开水平分隔
 - 点到点子接口(Point-to-Point)
 - 多点子接口(Multipoint)
 - R5被配置成帧中继交换机，其中有三条虚电路R1-R2，R1-R3，R1-R4，在R1的s0/0接口上启用子接口，其中s0/0.1用来连接R2，是一个点到点子接口，s0/0.2被用来连接R3和R4，是一个多点子接口。R1 s0/0.1的IP为12.1.1.1、s0/0.2的IP地址为134.1.1.1，R2的s0/1的IP地址为12.1.1.2，R3的s0/2的IP地址为134.1.1.3，R4的s0/3的IP地址为134.1.1.4。每个路由上都有一个回环接口，IP如图所示。在这个帧中继网络上运行RIP协议，测试多点子接口存在的水平分隔问题
-- ![帧中继子接口](_图片文件夹/_Cisco相关的笔记/帧中继子接口.png)
+- ![帧中继子接口](_pic/ciscoxg/帧中继子接口.png)
 
 ```router
 // R5配置成为帧中继交换机
@@ -3135,7 +3143,7 @@ R1(config-subif)# no ip split-horizon // 关闭R1的s0/0.2子接口的水平分�
 
 eigrp_over帧中继：R4是帧中继交换机，图中配置了两条虚电路R1-R2，R1-R3，R1-3各有一个回环接口IP
 
-![eigrp_over帧中继](_图片文件夹/_Cisco相关的笔记/eigrp_over帧中继.png)
+![eigrp_over帧中继](_pic/ciscoxg/eigrp_over帧中继.png)
 
 ```router
 // 配置R4成为帧中继交换机
@@ -3290,7 +3298,7 @@ R3(config-router)# net 13.1.1.0 0.0.0.255
 
 ### 模拟一
 
-- ![综合拓扑图](_图片文件夹/_Cisco相关的笔记/综合拓扑图.png)
+- ![综合拓扑图](_pic/ciscoxg/综合拓扑图.png)
 - 设备配置
     - R1配置
         - f0/0 打开
@@ -3591,5 +3599,3 @@ R1(config)# access-list 100 permit ip any any // 允许其他流量
 R1(config)# int f0/0.3
 R1(config-subif)# ip access-group 100 in // 在子接口上应用这个扩展ACL
 ```
-
-## todo

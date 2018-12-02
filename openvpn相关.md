@@ -1,10 +1,19 @@
-[info]: # ({"title":"CentOS安装openvpn", "create":"2018-09-02 11:11:34", "modify":"2018-09-02 11:11:34", "category":"笔记", "tag_list":["CentOS", "openvpn"], "info_list":[]})
+<!--
+{
+    "title": "openvpn相关",
+    "create": "2018-09-02 11:11:34",
+    "modify": "2018-12-02 16:07:34",
+    "tag": [
+        "openvpn",
+        "vpn"
+    ],
+    "info": [
+        "windows下代理全部流量未做//todo"
+    ]
+}
+-->
 
-CentOS安装openvpn，用于连接家庭内网等
-
-[preview]: # (end preview)
-
-## 准备
+## 安装
 
 下载地址：`https://openvpn.net/index.php/download/community-downloads.html`
 
@@ -46,6 +55,7 @@ key server.key
 dh dh2048.pem
 # 分配给客户端的ip地址池
 server 10.80.0.0 255.255.255.0
+push "route 10.80.0.0 255.255.255.0"
 # 推送给客户端的路由条目
 push "route 10.10.0.0 255.255.254.0"
 push "route 10.20.0.0 255.255.254.0"

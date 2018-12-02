@@ -1,8 +1,17 @@
-[info]: # ({"title":"常用的小脚本", "create":"2018-05-16 14:30:06", "modify":"2018-08-22 18:31:32", "category":"笔记", "tag_list":["bash", "shell", "linux", "脚本"],  "info_list":[]})
-
-记点偶尔用过的小脚本，~~说不定以后还用得到呢~~
-
-[preview]: # (end preview)
+<!--
+{
+    "title": "bash脚本",
+    "create": "2018-05-16 14:30:06",
+    "modify": "2018-12-02 19:40:55",
+    "tag": [
+        "xset",
+        "zram",
+        "tmpfs",
+        "bash"
+    ],
+    "info": []
+}
+-->
 
 ## 背光键盘灯控制
 
@@ -40,7 +49,7 @@ extension="${filename##*.}"
 filename="${filename%.*}"
 ```
 
-## zram启用
+## 开机启用zram
 
 可选：`sudo vim /etc/rc.local`
 
@@ -51,7 +60,7 @@ mkswap /dev/zram0 && #启用zram
 swapon -p 10 /dev/zram0 && #设置优先级zram>swap
 ```
 
-## tmpfs启用
+## 开机挂载/tmp为tmpfs
 
 将`/tmp`挂载为tmpfs，将内存用于应用的缓存
 
@@ -59,5 +68,3 @@ swapon -p 10 /dev/zram0 && #设置优先级zram>swap
 #编辑 /etc/fstab 添加以下内容
 tmpfs    /tmp    tmpfs    defaults,size=2048M    0    0
 ```
-
-## todo

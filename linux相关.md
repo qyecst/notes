@@ -1,14 +1,18 @@
-[info]: # ({"title":"Linux笔记", "create":"2018-06-01 07:35:09", "modify":"2018-08-22 ‏‎18:47:29", "category":"笔记", "tag_list":["linux", "操作系统"], "info_list":[]})
+<!--
+{
+    "title": "linux相关",
+    "create": "2018-06-01 07:35:09",
+    "modify": "2018-12-02 19:40:55",
+    "tag": [
+        "linux"
+    ],
+    "info": []
+}
+-->
 
-与Linux相关的笔记大部分都写这里，~~报错，不存在的~~
+## PC硬件
 
-[preview]: # (end preview)
-
-## CentOS
-
-### PC硬件
-
-#### 硬件组成
+### 硬件组成
 
 - 中央处理器/CPU
     - 服务器CPU
@@ -23,7 +27,7 @@
 - 机箱
 - 相关软件
 
-#### 硬件信息查看
+### 硬件信息查看
 
 - PCI设备
     - 显卡：`dmesg | grep -i vga`
@@ -50,7 +54,7 @@
     - xfs：linux高性能日志文件系统，CentOS7默认文件系统
     - `mount`挂载设备，`umount`卸载 `mount <device> <mount point>`，`umount <device>` or `umount <mount point>`
 
-#### 硬盘信息
+### 硬盘信息
 
 - 硬盘
     - 盘片、磁头、主轴、马达、磁头控制器、数据转换器、接口、缓存等
@@ -74,9 +78,9 @@
     - 3.5英寸：多用于台式机，采用3.5英寸硬盘的外置硬盘盒需要外接电源
     - 5.25英寸：早期台式机使用
 
-### 控制台
+## 控制台
 
-#### 控制台信息
+### 控制台信息
 
 - 字符控制台
     - tty终端
@@ -101,9 +105,9 @@
         - bash/csh/sh
         - `cat /etc/shells` 或 `chsh -l`查看当前系统支持的shell列表
 
-### 命令
+## 命令
 
-#### 常用命令
+### 常用命令
 
 - `date`查看/设置日期
     - 选项：`-s --set <date-string/2018-06-01>`设置时间，`-d --date`显示描述信息
@@ -122,20 +126,20 @@
     - 选项：`-c`显示后清除buffer，`-s`设置缓冲区大小，`-n`设置记录信息层次
 - `free`系统内存信息
 
-#### 文本编辑
+### 文本编辑
 
 - nano编辑器
 - vi/vim编辑器
     - `i`插入模式，`ESC`普通模式，`:`命令模式
     - `x` 或 `wq`保存退出，`w`保存，`q!`退出不保存
 
-#### 远程连接
+### 远程连接
 
 - Xshell/Xftp
 - SecureCRT
 - Telnet
 
-#### net-tools工具集
+### net-tools工具集
 
 - 废弃/长期未更新
 - `net-tools`软件包
@@ -160,7 +164,7 @@
 |组播|ipmaddr|ip maddr|
 |统计|netstat|ss|
 
-#### iproute工具集
+### iproute工具集
 
 - `iproute`软件包
 - `ip`
@@ -201,7 +205,7 @@
         - 显示目的端口号小于1000的套接字：`ss -nt 'dport \< :1000'`
         - 显示源端口号大于1024的套接字：`ss -nt 'sport gt :1024'`
 
-#### 文件恢复
+### 文件恢复
 
 extundelete：
 
@@ -216,9 +220,9 @@ extundelete：
     - `extundelete /dev/<device> --restore-all`
     - `ls RECOVERED_FILES/`
 
-### PC启动过程
+## PC启动过程
 
-#### 启动过程信息
+### 启动过程信息
 
 - 开机自检
     - BIOS，硬件自检
@@ -244,7 +248,7 @@ extundelete：
     - init根据定义的级别去执行相应目录下的脚本
     - 0关机 1单用户 2无网络多用户 3网络多用户 4保留 5图形多用户 6重启
 
-#### root密码恢复
+### root密码恢复
 
 CentOS6
 
@@ -254,9 +258,9 @@ CentOS7
 
 grub菜单->`e`进入编辑->找到`ro`项条目->修改为`rw init=/sysroot/bin/sh`->`Ctrl + X`启动->`chroot /sysroot`更换环境->`passwd root`修改密码[->`touch /.autorelabel`创建文件->`/bin/sh shutdown -r now`重启]
 
-### 用户
+## 用户
 
-#### 用户信息
+### 用户信息
 
 - 多用户多任务分时操作系统
 - 用户
@@ -278,7 +282,7 @@ grub菜单->`e`进入编辑->找到`ro`项条目->修改为`rw init=/sysroot/bin
 - 操作
     - `useradd` `userdel` `usermod` `adduser` `passwd`
 
-#### 批量添加用户
+### 批量添加用户
 
 1.编辑文本用户文件，每行按照`/etc/passwd`格式，用户名、uid、家目录不能相同，密码栏留空或x
 
@@ -304,9 +308,9 @@ user2:123456
 
 若缺失用户模板文件，拷贝`/etc/skel/`下的文件至新增用户家目录，使用脚本
 
-### 文件系统
+## 文件系统
 
-#### 文件系统信息
+### 文件系统信息
 
 - 文件系统
     - `stat <file>` `df -i` `ls -i` `xfs_repair [-n]`
@@ -332,7 +336,7 @@ user2:123456
         - 软链接
             - 符号链接
 
-#### 磁盘加密
+### 磁盘加密
 
 - 加密：`cryptsetup luksFormat <device>`
 - 打开：`cryptsetup luksOpen <device> <volume_name>`
@@ -346,7 +350,7 @@ user2:123456
     - 加key：`cryptsetup luksAddKey <device> <password_file>`
 - 关闭：`cryptsetup luksClose <volume_name>`
 
-#### LVM
+### LVM
 
 - 将底层磁盘组合，以逻辑卷的方式呈现给上层应用
 - 动态管理磁盘，不改变上层现有的逻辑卷
@@ -376,7 +380,7 @@ user2:123456
         - 热备份：不卸载文件系统，能读写
     - 创建：`lvcreate -s -n <lvname> -L <300M> <volume_name>`
 
-#### SSM
+### SSM
 
 - 借助ssm（system-storage-manager）管理LVM卷
 - 显示信息：`ssm list`
@@ -386,7 +390,7 @@ user2:123456
 - 快照：`ssm snapshot -s <500M> -n <name> <vg_name>`
 - 删除：`ssm remove`
 
-#### 磁盘配额
+### 磁盘配额
 
 - 只在指定的文件系统有效，当用户使用未启用配额的文件系统时不受影响
 - 用户账号/组账号，磁盘容量，文件数量
@@ -402,9 +406,9 @@ user2:123456
     - 查看信息：`xfs_quota -x -c 'report' <mount_point>`
     - 给test用户设置配额：`xfs_quota -x -c 'limit bsoft=100M bhard=120M -u test' <mount_point>`
 
-#### RAID磁盘阵列
+### RAID磁盘阵列
 
-##### raid信息
+#### raid信息
 
 - RAID（Redundant Array of Independent Disks）独立磁盘冗余阵列
 - 分类
@@ -419,7 +423,7 @@ user2:123456
     - RAID5
     - RAID10
 
-##### RAID0
+#### RAID0
 
 - 条带，磁盘2块/以上，大小最好相同
 - 成本低，提高性能、吞吐量
@@ -435,7 +439,7 @@ user2:123456
 - 停止：`mdadm -S <md_device>`
 - 启动：`mdadm -As`
 
-##### RAID1
+#### RAID1
 
 - 镜像卷，磁盘2块/以上，大小最好相同/大小为最小分区容量
 - 将一块盘的数据镜像到另一块磁盘/数据写入一块磁盘时，镜像到另一块磁盘
@@ -448,7 +452,7 @@ user2:123456
 - 格式化，挂载
 - 模拟损坏：`mdadm /dev/md1 -f /dev/sdc1`
 
-##### RAID5
+#### RAID5
 
 - 磁盘3块/以上
 - 提供热备及故障恢复，只能坏一块
@@ -460,7 +464,7 @@ user2:123456
 - 查看状态：`cat /proc/mdstat`
 - 格式化，挂载
 
-### 目录结构
+## 目录结构
 
 - `cat` `tac` `tail` `head` `ls` `tree` `nl` `more` `less` `chattr` `lsattr`
 - 多数情况将额外软件安装于`/usr/local`，并链接执行程序于`/usr/local/bin`
@@ -503,13 +507,13 @@ user2:123456
 - /sys
     - 虚拟文件系统，内核/程序信息
 
-### 文件
+## 文件
 
-#### 文件查看
+### 文件查看
 
 `cat` `tac` `tail` `head` `ls` `tree` `nl` `more` `less` `chattr` `lsattr` `file`
 
-#### 文件属性
+### 文件属性
 
 - `chattr` `lsattr`
 - `chattr`
@@ -524,7 +528,7 @@ user2:123456
     - -d：显示目录自身
     - -R：连同子目录的文件一起显示
 
-#### 归档压缩
+### 归档压缩
 
 - `tar` `zip`
 - `tar`
@@ -541,7 +545,7 @@ user2:123456
     - `zip filename.zip -r <path>` `zip filename.zip <file>`
     - `unzip file.zip -d <path>`
 
-#### 文件权限
+### 文件权限
 
 普通rwx权限
 
@@ -558,10 +562,10 @@ x：eXecute执行-1
 ```
 
 对于目录来说`rx`是必要的，若只有`r`权限，可以看到内部文件（存疑），但是无法读取信息，无法进入目录  
-![目录只有r权限](_图片文件夹/_Linux相关的笔记/目录只有r权限.png)
+![目录只有r权限](_pic/linuxxg/目录只有r权限.png)
 
 若只有`x`权限，无法查看内部文件，可以进入目录  
-![目录只有x权限](_图片文件夹/_Linux相关的笔记/目录只有x权限.png)
+![目录只有x权限](_pic/linuxxg/目录只有x权限.png)
 
 特殊权限
 
@@ -571,7 +575,7 @@ s：SGID/set GID，占g-x位置，一般用于目录文件，SGID对二进制程
 
 t：SBIT/sticky Bit，占o-x位置，只针对目录有效。当用户在该目录下建立文件或目录时，仅有自己与root才能删除。例：`/tmp`
 
-### 软件包管理
+## 软件包管理
 
 - cpio
     - o：将文件打包成文件/将文件输出到设备 i：将打包的文件解压/还原到设备 t：查看打包文件内容 v：显示信息 d：自动建立相应目录 c：一种存储方式 B：默认Blocks至5120bytes，加快存取速度
@@ -609,7 +613,7 @@ t：SBIT/sticky Bit，占o-x位置，只针对目录有效。当用户在该目�
     - 编译：`make -j 4 # 指定同时编译进程数`
     - 安装：`make install`
 
-### 输入输出
+## 输入输出
 
 - 输入输出
     - 0/stdin：标准输入
@@ -623,7 +627,7 @@ t：SBIT/sticky Bit，占o-x位置，只针对目录有效。当用户在该目�
     - 读取输入并输出到文件
     - a：追加
 
-### 查找修改编辑
+## 查找修改编辑
 
 - `which <command>`
     - 查找命令
@@ -655,7 +659,7 @@ t：SBIT/sticky Bit，占o-x位置，只针对目录有效。当用户在该目�
 - `sed`
 - `vim`
 
-### 进程
+## 进程
 
 - 程序
     - 一组指令的集合
@@ -681,9 +685,9 @@ t：SBIT/sticky Bit，占o-x位置，只针对目录有效。当用户在该目�
     - 一个进程至少一个线程，称为主线程
     - 一个进程的多个线程共享代码、数据
 
-### 网络
+## 网络
 
-#### 配置文件
+### 配置文件
 
 CentOS7：`/etc/sysconfig/network-scripts/ifcfg-<device-name>`
 
@@ -723,9 +727,9 @@ DNS2=223.5.5.5
 
 重启网络服务：`service network restart` or `systemctl restart network`
 
-### 内核
+## 内核
 
-#### 内核信息
+### 内核信息
 
 组成：
 
@@ -754,7 +758,7 @@ DNS2=223.5.5.5
         - 网络协议部分负责实现每一种可能的网络传输协议
         - 网络设备驱动程序则主要负责与硬件设备进行通信，每一种可能的网络硬件设备都有相应的设备驱动程序
 
-#### 升级内核
+### 升级内核
 
 yum：`yum install -y kernel`
 
@@ -790,9 +794,9 @@ elrepo：`http://elrepo.org`
 - 查看启动项：`grub2-editenv list`
 - 重启：`reboot && uname -r`
 
-### shell
+## shell
 
-#### shell脚本
+### shell脚本
 
 查看可用shell：`cat /etc/shells` or `chsh -l`
 
@@ -980,13 +984,3 @@ i # 忽略大小写
 # awk文本处理
 awk [options] 'command' file1, file2, ...etc
 ```
-
-#### grep-TODO
-
-#### awk-TODO
-
-#### sed-TODO
-
-#### find-TODO
-
-## todo

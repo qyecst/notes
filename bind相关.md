@@ -1,47 +1,21 @@
-[info]: # ({"title":"docker内使用alpine做dns服务器", "create":"2018-09-02 11:26:43", "modify":"2018-09-02 11:26:43", "category":"笔记", "tag_list":["docker", "bind", "dns", "alpine"], "info_list":[]})
+<!--
+{
+    "title": "bind相关",
+    "create": "2018-09-02 11:26:43",
+    "modify": "2018-12-02 19:00:45",
+    "tag": [
+        "bind",
+        "dns"
+    ],
+    "info": [
+        "主备配置未做//todo"
+    ]
+}
+-->
 
-docker内使用alpine做dns服务器，~~好像没啥用？~~
+## bind安装
 
-[preview]: # (end preview)
-
-## alpine的dockerfile
-
-```dockerfile
-# 使用alpine
-FROM alpine:3.8
-
-# 换源，安装bind
-RUN echo "http://mirrors.aliyun.com/alpine/v3.8/main/" > /etc/apk/repositories && apk add bind
-
-# -f参数前台运行，防止docker退出
-ENTRYPOINT [ "/usr/sbin/named", "-c", "/etc/bind/named.conf", "-u", "named", "-f" ]
-```
-
-## docker-compose文件
-
-```dockercompose
-# docker-compose版本
-version: "3"
-
-# 服务列表
-services:
-    # 服务名
-    bind_service:
-        # 构建
-        build: "./dockerfile/bind/"
-        # 启动策略
-        restart: "always"
-        # 容器名
-        container_name: "bind_alpine"
-        # 端口
-        ports:
-            - "53:53/udp"
-        # 挂载
-        volumes:
-            - "named.conf:/etc/bind/named.conf"
-            - "pri/10.zone:/var/bind/pri/10.zone"
-            - "pri/test.zone:/var/bind/pri/test.zone"
-```
+安装:`yum install bind`
 
 ## bind配置
 
@@ -123,6 +97,43 @@ $TTL 1D
 2.1.1           IN      PTR     www.test.do.    ; 域名反解地址
 ```
 
-## 启动
+## docker中使用bind
 
-`docker-compose up -d`
+基于alpine：
+
+```dockerfile
+# 使用alpine
+FROM alpine:3.8
+
+# 换源，安装bind
+RUN echo "http://mirrors.aliyun.com/alpine/v3.8/main/" > /etc/apk/repositories && apk add bind
+
+# -f参数前台运行，防止docker退出
+ENTRYPOINT [ "/usr/sbin/named", "-c", "/etc/bind/named.conf", "-u", "named", "-f" ]
+```
+
+使用docker-compose启动：`docker-compose up -d`
+
+```dockercompose
+# docker-compose版本
+version: "3"
+
+# 服务列表
+services:
+    # 服务名
+    bind_service:
+        # 构建
+        build: "./dockerfile/bind/"
+        # 启动策略
+        restart: "always"
+        # 容器名
+        container_name: "bind_alpine"
+        # 端口
+        ports:
+            - "53:53/udp"
+        # 挂载
+        volumes:
+            - "named.conf:/etc/bind/named.conf"
+            - "pri/10.zone:/var/bind/pri/10.zone"
+            - "pri/test.zone:/var/bind/pri/test.zone"
+```

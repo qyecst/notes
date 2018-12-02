@@ -1,4 +1,8 @@
+<type>(<scope>): <subject>
 
+<body>
+
+# git config -–global commit.template <commit template path>
 ### <type>(<scope>): <subject>
 ### 空一行
 ### <body>
@@ -25,7 +29,7 @@
 #
 ### Closes #123, #245, #992
 #
-# rever后跟撤销的header信息,body信息固定格式
+# revert后跟撤销的header信息,body信息固定格式
 ### revert: <type(scope): <subject>
 ### 空一行
 ### This reverts commit <commit_hash>

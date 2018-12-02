@@ -1,8 +1,14 @@
-[info]: # ({"title":"C语言相关笔记", "create":"2018-07-20 11:04:52", "modify":"2018-08-22 18:28:55", "category":"笔记", "tag_list":["C", "C语言", "编程"], "info_list":[]})
-
-C语言相关的笔记基本都在这里，~~指针，无尽的指针，真是令人头大~~
-
-[preview]: # (end preview)
+<!--
+{
+    "title": "c相关",
+    "create": "2018-07-20 11:04:52",
+    "modify": "2018-12-02 19:40:55",
+    "tag": [
+        "c"
+    ],
+    "info": []
+}
+-->
 
 ## 程序结构
 
@@ -874,5 +880,3 @@ int fseek(FILE *fp, long offset, int whence);
 fseek(fp, 1, SEEK_CUR); /* 后移1字节 */
 fseek(fp, -1, SEEK_CUR); /* 前移1字节 */
 ```
-
-## todo
