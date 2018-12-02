@@ -308,6 +308,14 @@ http {
             # root /usr/share/nginx/html;
             # index index.html index.htm;
         }
+        #location / {
+        #    proxy_pass http://127.0.0.1:8080/;
+        #    proxy_http_version 1.1;
+        #    proxy_set_header Upgrade $http_upgrade;
+        #    proxy_set_header Connection $connection_upgrade;
+        #    proxy_set_header X-Forwarded-For $remote_addr;
+        #    proxy_set_header X-Real-IP $remote_addr;
+        #}
     }
 }
 ```
@@ -355,5 +363,18 @@ http {
             proxy_pass http://<group_name>;
         }
     }
+}
+```
+
+## fastcgi配置
+
+```conf
+location ~ \.php$ {
+    root    html;
+    #fastcgi_pass   127.0.0.1:9000;
+    fastcgi_pass    unix:/var/run/php-fpm.sock;
+    fastcgi_index   index.php;
+    fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    include     fastcgi_params;
 }
 ```
