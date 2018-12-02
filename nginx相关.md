@@ -17,7 +17,7 @@
 - 依赖：`zlib-devel pcre-devel openssl-devel`
 - 下载源码包，解压，进入
 - `useradd -M -s /sbin/nologin nginx`
-- `./configure --prefix=/usr/local/nginx --user=nginx --group=nginx --with-http_ssl_module [.etc]`
+- `./configure --prefix=/usr/local/nginx --sbin-path=/usr/local/nginx/sbin/nginx --conf-path=/usr/local/nginx/conf/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx/nginx.pid --lock-path=/var/lock/nginx.lock --user=nginx --group=nginx --with-http_ssl_module --with-http_stub_status_module --with-http_gzip_static_module --http-client-body-temp-path=/var/tmp/nginx/client/ --http-proxy-temp-path=/var/tmp/nginx/proxy/ --http-fastcgi-temp-path=/var/tmp/nginx/fcgi/ --http-uwsgi-temp-path=/var/tmp/nginx/uwsgi --http-scgi-temp-path=/var/tmp/nginx/scgi --with-pcre`
 - `make clean && make -j 4 && make install`
 
 开放防火墙端口：`iptables -I INPUT -p tcp --dport 80 -j ACCEPT` or `firewall-cmd --add-port=80/tcp --permanent && firewall-cmd --reload`
