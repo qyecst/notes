@@ -42,6 +42,8 @@ innodb_flush_log_at_trx_commit=2
 # 1 提交后将二进制文件写入磁盘并立即执行刷新操作
 # N 在N次提交后刷新到磁盘
 sync_binlog=100
+# 开启binlog，值为日志前缀
+log-bin=mysql_binlog
 
 # 超时时间
 wait_timeout = 28800
@@ -49,6 +51,11 @@ interactive_timeout = 28800
 
 # 连接数
 max_connections = 200
+
+# ONLY_FULL_GROUP_BY SELECT中的列需要在GROUP BY中出现
+# PIPES_AS_CONCAT 将"||"视为字符串的连接操作符而非或运算符
+# ANSI_QUOTES 启用后不能使用双引号引用字符串，它被解释为识别符
+sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
 
 [mysql]
 default-character-set=utf8
@@ -64,4 +71,46 @@ default-character-set=utf8
 
 # 引入配置
 !includedir /etc/mysql/conf.d/
+```
+
+## binlog常用操作
+
+```mysql
+# 查看日志列表
+> show master logs;
+# 查看master状态，最新一个binlog日志编号，最后一个操作事件pos结束点
+> show master status;
+# 刷新log日志，开始产生一个新编号的binlog日志文件
+> flush logs;
+# 清空binlog日志
+> reset master;
+```
+
+`mysqlbinlog`用于查看binlog
+
+```bash
+mysqlbinlog /path/mysql_binlog.00001
+```
+
+```mysql
+# mysql命令行内; logfile_name 默认第一个日志文件; pos 默认第一个; offset默认0; row_count默认全部;
+> show binlog events [IN 'logfile_name'] [FROM pos] [LIMIT [offset,] row_count];
+```
+
+## 数据操作
+
+```bash
+# 复制
+> CREATE DATABASE `db_new` DEFAULT CHARACTER SET UTF8 COLLATE UTF8_GENERAL_CI;
+mysqldump -u<user_name> -p<user_pwd> --add-drop-table db_old | mysql -h 192.168.1.1 db_new -u<user_name> -p<user_pwd>
+
+# 备份
+mysqldump -u<user_name> -p<user_pwd> --flush-logs[F] --lock-all-tables[l] --log-error=/path/dump.err --databases[B] db1 db2 > /path/db.bak.sql
+
+# 恢复
+mysql -u<user_name> -p<user_pwd> -v < /path/db.bak.sql;
+
+# --start-position=[pos]  --stop-position=[pos]  --start-datetime="xxxx-xx-xx xx:xx:xx"  --stop-datetime="xxxx-xx-xx xx:xx:xx"  --database=[db_name]
+mysqlbinlog  /path/mysql_binlog.00001 | mysql -u<user_name> -p<user_pwd> -v db_name
+mysqlbinlog --stop-position=953 --database=db_name /path/mysql_binlog.00001 | mysql -u<user_name> -p<user_pwd> -v db_name
 ```
