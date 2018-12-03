@@ -1,6 +1,6 @@
 <!--
 {
-    "title": "lamp+lnmp相关",
+    "title": "lamp&lnmp相关",
     "create": "2018-05-16 15:02:26",
     "modify": "2018-12-02 19:40:55",
     "tag": [
