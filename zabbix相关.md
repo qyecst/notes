@@ -46,7 +46,8 @@ default-character-set=utf8
 ### docker-compose文件
 
 ```dockercompose
-version: "3.5"                                                                                                                                                  
+version: "3.5"
+
 services:
     zabbix-mysql:
         image: mysql
