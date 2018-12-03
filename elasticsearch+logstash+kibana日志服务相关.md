@@ -51,23 +51,7 @@ input {
         port => "9652"
         type => "rsys"
     }
-    tcp {
-        port => "9652"
-        type => "rsys"
-    }
     udp {
-        port => "9651"
-        type => "hw"
-    }
-    tcp {
-        port => "9651"
-        type => "hw"
-    }
-    udp {
-        port => "9650"
-        type => "h3c"
-    }
-    tcp {
         port => "9650"
         type => "h3c"
     }
@@ -99,29 +83,11 @@ filter {
             overwrite => ["message"]
         }
     }
-    else if [type] == "hw" {
-        grok {
-            match => {
-                "message" => "<%{BASE10NUM:syslog_pri}>(?<timestamp>.*? .*?) %{DATA:hostname} %%%{DATA:ddModuleName}/%{POSINT:severity}/%{DATA:Brief}:%{GREEDYDATA:message}"
-            }
-            remove_field => [ "timestamp" ]
-            add_field => {
-                "severity_code" => "%{severity}"
-            }
-            overwrite => ["message"]
-        }
-    }
     mutate {
         # 正则表达式替换gsub '字段', '匹配式', '值'
         gsub => [
             "severity", "0", "Emergency",
-            "severity", "1", "Alert",
-            "severity", "2", "Critical",
-            "severity", "3", "Error",
-            "severity", "4", "Warning",
-            "severity", "5", "Notice",
-            "severity", "6", "Informational",
-            "severity", "7", "Debug"
+            "severity", "1", "Alert"
         ]
         # 类型转换
         convert => {
@@ -144,6 +110,7 @@ filter {
         # 顺序 rename => update => replace => convert => gsub => uppercase => lowercase => strip => remove => split => join => merge
     }
 }
+# 输出配置
 output {
     elasticsearch {
         hosts => [ "elasticsearch:9200" ]
@@ -162,7 +129,7 @@ services:
         image: elasticsearch:6.5.0
         restart: always
         #ports:
-        #  - "9300:9200"
+        #  - "9200:9200"
         environment:
             discovery.type: single-node
             ES_JAVA_OPTS: -Xms512m -Xmx512m # 配置ES的java虚机内存使用
@@ -174,12 +141,8 @@ services:
         image: logstash:6.5.0
         restart: always
         ports:
-            - "9652:9652/tcp"
             - "9652:9652/udp"
-            - "9650:9650/tcp"
             - "9650:9650/udp"
-            - "514:9651/tcp"
-            - "514:9651/udp"
         depends_on:
             - elasticsearch
         container_name: logstash
