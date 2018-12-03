@@ -397,3 +397,20 @@ location ~ \.php$ {
 # listen.mode=0660
 # listen=/var/run/php-fpm.sock
 ```
+
+## uwsgi配置
+
+```conf
+location / {
+    # 加载uwsgi
+    include uwsgi_params;
+    # 使用socket文件通信
+    uwsgi_pass unix:/tmp/uwsgi.sock;
+    #uwsgi_pass some_uwsgi_server:80;
+}
+# uwsgi配置，默认在uwsgi.ini中
+# socket=/tmp/uwsgi.sock
+# #socket=127.0.0.1:80
+# chmod-socket=660
+# #stats=127.0.0.1:9001
+```
