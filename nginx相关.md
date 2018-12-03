@@ -391,4 +391,9 @@ location ~ \.php$ {
     fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
     include     fastcgi_params;
 }
+# php-fpm配置 默认在www.conf中
+# listen.owner=nginx
+# listen.group=nginx
+# listen.mode=0660
+# listen=/var/run/php-fpm.sock
 ```
