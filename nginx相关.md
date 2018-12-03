@@ -2,7 +2,7 @@
 {
     "title": "nginx相关",
     "create": "2018-05-16 15:02:26",
-    "modify": "2018-12-02 19:40:55",
+    "modify": "2018-12-03 11:25:37",
     "tag": [
         "nginx"
     ],
@@ -14,15 +14,29 @@
 
 ### 编译安装
 
-- 依赖：`zlib-devel pcre-devel openssl-devel`
-- 下载源码包，解压，进入
-- `useradd -M -s /sbin/nologin nginx`
-- `./configure --prefix=/usr/local/nginx --sbin-path=/usr/local/nginx/sbin/nginx --conf-path=/usr/local/nginx/conf/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx/nginx.pid --lock-path=/var/lock/nginx.lock --user=nginx --group=nginx --with-http_ssl_module --with-http_stub_status_module --with-http_gzip_static_module --http-client-body-temp-path=/var/tmp/nginx/client/ --http-proxy-temp-path=/var/tmp/nginx/proxy/ --http-fastcgi-temp-path=/var/tmp/nginx/fcgi/ --http-uwsgi-temp-path=/var/tmp/nginx/uwsgi --http-scgi-temp-path=/var/tmp/nginx/scgi --with-pcre`
-- `make clean && make -j 4 && make install`
+```bash
+# 依赖
+yum install zlib-devel pcre-devel openssl-devel
+# 添加用户
+useradd -M -s /sbin/nologin nginx
+# 配置
+./configure --prefix=/usr/local/nginx --sbin-path=/usr/local/nginx/sbin/nginx --conf-path=/usr/local/nginx/conf/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx/nginx.pid --lock-path=/var/lock/nginx.lock --user=nginx --group=nginx --with-http_ssl_module --with-http_stub_status_module --with-http_gzip_static_module --http-client-body-temp-path=/var/tmp/nginx/client/ --http-proxy-temp-path=/var/tmp/nginx/proxy/ --http-fastcgi-temp-path=/var/tmp/nginx/fcgi/ --http-uwsgi-temp-path=/var/tmp/nginx/uwsgi --http-scgi-temp-path=/var/tmp/nginx/scgi --with-pcre
+# 编译&安装
+make clean
+make -j [num_of_processes]
+make install
 
-开放防火墙端口：`iptables -I INPUT -p tcp --dport 80 -j ACCEPT` or `firewall-cmd --add-port=80/tcp --permanent && firewall-cmd --reload`
+# 开放防火墙端口
+iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+iptables -I INPUT -p tcp --dport 443 -j ACCEPT
 
-### 安装
+# 立即生效
+firewall-cmd --add-port=80/tcp --add-port=443/tcp
+# firewall-cmd --reload 后生效/重启生效/长期生效
+firewall-cmd --add-port=80/tcp --add-port=443/tcp --permanent
+```
+
+### 软件源安装
 
 ```bash
 yum install nginx
