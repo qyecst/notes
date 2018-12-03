@@ -97,6 +97,8 @@ CMD ["java", "-jar", "ide-backend.jar", "--PTY_LIB_FOLDER=/root/lib"]
 ### CMD/ENTRYPOINT
 
 ```dockerfile
+# ENTRYPOINT ["/bin/echo", "Hello World"]    exec执行格式，推荐
+# ENTRYPOINT /bin/echo Hello World    shell执行格式
 # ENTRYPOINT 中的参数始终会被使用，CMD 的额外参数可以在容器启动时动态替换掉
 
 CMD echo "Hello World"
