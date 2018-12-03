@@ -36,7 +36,7 @@ UseDNS no # 不使用DNS查询客户端
 AddressFamily inet # 使用哪种地址族。any(默认)、inet(仅IPv4)、inet6(仅IPv6)
 SyslogFacility AUTHPRIV # log记录，包括特权信息如用户名在内的认证活动
 PasswordAuthentication yes # 使用口令认证
-Port 2333 # 端口
+Port 22 # 端口
 Protocol 2 # 协议
 PermitRootLogin no # root登入
 X11Forwarding no # 禁止用户运行远程主机上的X程序
