@@ -15,6 +15,15 @@
 
 ## 常用配置
 
+环境配置
+
+```conf
+# 需要开启ip_forward以支持docker内网络转发
+# /etc/sysctl.conf `sysctl -p`
+
+net.ipv4.ip_forward=1
+```
+
 ```conf
 # 默认配置文件 /etc/docker/daemon.json
 
