@@ -15,6 +15,31 @@
 }
 -->
 
+## elasticsearch配置
+
+环境配置：
+
+```conf
+# elasticsearch默认不允许root执行
+useradd es_user
+
+# /etc/security/limits.conf 调整文件句柄 `ulimit -Hn`
+es_user  hard  nofile  65536
+es_user  soft  nofile  65536
+
+# /etc/sysctl.conf 调整内存映射 `sysctl -p`
+vm.max_map_count=655360
+```
+
+配置文件：
+
+```conf
+# es_home/bin/elasticsearch
+
+# 调整使用内存
+ES_JAVA_OPTS="-Xms1g -Xmx1g"
+```
+
 ## logstash配置文件
 
 ```conf
