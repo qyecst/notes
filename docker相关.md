@@ -28,13 +28,13 @@ net.ipv4.ip_forward=1
 # 默认配置文件 /etc/docker/daemon.json
 
 {
-  "registry-mirrors" : [ # 仓库源
-    "http://some_mirror_url"
-  ],
-  "insecure-registries" : [ # 允许不安全/http的仓库源
-    "registry_host:port"
-  ],
-  "userns-remap": "some_username" # 用户资源隔离 若值为 default 会自动创建并映射为dockremap用户和用户组
+    "registry-mirrors" : [ # 仓库源
+        "http://some_mirror_url"
+    ],
+    "insecure-registries" : [ # 允许不安全/http的仓库源
+        "registry_host:port"
+    ],
+    "userns-remap": "some_username" # 用户资源隔离 若值为 default 会自动创建并映射为dockremap用户和用户组
 }
 
 ## userns-remap: 修改 /etc/subuid 和 /etc/subgid 添加下列两行，建立宿主机用户/用户组到容器用户的映射
