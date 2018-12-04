@@ -16,12 +16,17 @@
 
 Sonatype Nexus: Maven仓库管理软件，常用于搭建私服。其他还有Apache Archiva、Artifactory
 
+### 相关链接
+
 ```url
 # software
 https://www.sonatype.com/nexus-repository-oss
 
 # docker
 https://hub.docker.com/r/sonatype/nexus3/
+
+# document
+https://help.sonatype.com/repomanager3/download
 ```
 
 ## docker-compose部署
