@@ -40,6 +40,10 @@ vm.max_map_count=655360
 ES_JAVA_OPTS="-Xms1g -Xmx1g"
 ```
 
+启动：
+
+`./bin/elasticsearch -d -p pid`
+
 ## logstash配置文件
 
 ```conf
