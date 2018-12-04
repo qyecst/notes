@@ -42,7 +42,9 @@ ES_JAVA_OPTS="-Xms1g -Xmx1g"
 
 启动：
 
-`./bin/elasticsearch -d -p pid`
+```bash
+./bin/elasticsearch -d -p pid
+```
 
 ## logstash配置文件
 
