@@ -1,0 +1,98 @@
+## git-hooks
+
+```bash
+git_dir=$(pwd)
+git_branch=$(git rev-parse --abbrev-ref HEAD)
+work_dir=/path/to/dirs/$(echo $(pwd)|awk '{cnt=gsub("/","_");print "some_str"$0}')
+
+mkdir -p "$work_dir"
+GIT_WORK_TREE=$work_dir GIT_DIR=$git_dir git checkout -f $git_branch
+
+lint_files=$(git diff --name-only HEAD HEAD~1)
+if [[ "a$lint_files" = "a" ]]; then
+    exit 0
+fi
+
+# do some scripts
+exit 0
+```
+
+## systemd services
+
+```bash
+# cat /usr/lib/systemd/system/tomcat.service
+
+[Unit] 
+Description=Apache Tomcat Web Application Container 
+After=network.target 
+[Service] 
+Type=forking 
+ExecStart=/opt/apache-tomcat/bin/startup.sh 
+ExecStop=/opt/apache-tomcat/bin/shutdown.sh 
+[Install] 
+WantedBy=multi-user.target 
+
+# cat /usr/lib/systemd/system/sshd.service
+
+[Unit]
+Description=OpenSSH server daemon
+Documentation=man:sshd(8) man:sshd_config(5)
+After=network.target sshd-keygen.service
+Wants=sshd-keygen.service
+
+[Service]
+Type=notify
+EnvironmentFile=/etc/sysconfig/sshd
+ExecStart=/usr/sbin/sshd -D $OPTIONS
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target
+
+
+## test.service
+[Unit]
+Description=test
+After=network.target
+[Service]
+ExecStart=/bin/echo execstart1
+ExecStart=
+ExecStart=/bin/echo execstart2
+ExecStartPost=/bin/echo post1
+ExecStartPost=/bin/echo post2
+[Install]
+WantedBy=multi-user.target
+## 输出
+Dec 11 17:01:45 [localhost] systemd: Starting test...
+Dec 11 17:01:45 [localhost] echo: execstart2
+Dec 11 17:01:45 [localhost] echo: post1
+Dec 11 17:01:45 [localhost] echo: post2
+Dec 11 17:01:45 [localhost] systemd: Started test.
+
+[Unit]
+Description=test
+After=network.target
+[Service]
+Type=oneshot # add
+ExecStart=/bin/echo execstart1
+ExecStart=/bin/echo execstart21
+ExecStart=/bin/echo execstart2
+ExecStartPost=/bin/echo post1
+ExecStartPost=/bin/echo post2
+[Install]
+WantedBy=multi-user.target
+
+## 输出
+# service has more than one ExecStart= setting, which is only allowed for Type=oneshot services. Refusing.
+# [Service] 需要添加 Type=oneshot
+Dec 11 17:04:23 [localhost] systemd: Starting test...
+Dec 11 17:04:23 [localhost] echo: execstart1
+Dec 11 17:04:23 [localhost] echo: execstart21
+Dec 11 17:04:23 [localhost] echo: execstart2
+Dec 11 17:04:23 [localhost] echo: post1
+Dec 11 17:04:23 [localhost] echo: post2
+Dec 11 17:04:23 [localhost] systemd: Started test.
+```
