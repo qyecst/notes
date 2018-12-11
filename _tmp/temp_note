@@ -42,7 +42,7 @@ Wants=sshd-keygen.service
 
 [Service]
 Type=notify
-EnvironmentFile=/etc/sysconfig/sshd
+EnvironmentFile=-/etc/sysconfig/sshd # `-`表示"抑制错误"，即使/etc/sysconfig/sshd文件不存在，也不会抛出错误
 ExecStart=/usr/sbin/sshd -D $OPTIONS
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
