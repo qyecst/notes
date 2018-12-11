@@ -95,4 +95,21 @@ Dec 11 17:04:23 [localhost] echo: execstart2
 Dec 11 17:04:23 [localhost] echo: post1
 Dec 11 17:04:23 [localhost] echo: post2
 Dec 11 17:04:23 [localhost] systemd: Started test.
+
+# supervisord.service
+
+[Unit]
+Description=Supervisor daemon
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/supervisord -c /etc/supervisord.conf
+ExecStop=/usr/bin/supervisorctl $OPTIONS shutdown
+ExecReload=/usr/bin/supervisorctl $OPTIONS reload
+KillMode=process
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target
 ```
