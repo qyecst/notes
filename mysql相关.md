@@ -149,6 +149,7 @@ mysqlbinlog --stop-position=953 --database=db_name /path/mysql_binlog.00001 | my
 CREATE USER 'user' IDENTIFIED BY 'u_passwd';
 GRANT ALL PRIVILEGES ON db.* TO 'user'@'%' IDENTIFIED BY 'passwd';
 REVOKE ALL PRIVILEGES ON db.* FROM 'user'@'%';
+GRANT USAGE ON *.* TO 'user'@'%' WITH MAX_USER_CONNECTIONS 10;
 
 # mysql 8.x
 CREATE USER 'user' IDENTIFIED WITH mysql_native_password BY 'passwd';
