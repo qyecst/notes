@@ -12,7 +12,24 @@
 
 ## mysql信息
 
-初始化：`mysql --initialize-insecure --user=mysql --basedir=/usr/local/mysql --datadir=/data/mysql`
+### 初始化
+
+`mysql --initialize-insecure --user=mysql --basedir=/usr/local/mysql --datadir=/data/mysql`
+
+### 安装：
+
+```bash
+# https://dev.mysql.com/downloads/repo/yum/ # yum源安装mysql
+# repo文件 yum安装mariadb
+#[mariadb]
+#name = MariaDB
+#baseurl = http://yum.mariadb.org/10.1/centos7-amd64
+#gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+#gpgcheck=1
+
+yum install mysql-server mysql-devel mysql-libs # centos6
+yum install mariadb mariadb-server mariadb-libs # centos7
+```
 
 ## mysql配置
 
