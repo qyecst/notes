@@ -29,6 +29,8 @@ mysql：`/usr/local/mysql/scripts/mysql_install_db --user=mysql --basedir=/usr/l
 `vim /usr/local/httpd/conf/httpd.conf`
 
 ```apache
+LoadModule php5_module modules/libphp5.so
+
 # :53 line
 AddType application/x-httpd-php .pho
 
