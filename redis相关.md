@@ -92,3 +92,30 @@ redis-cli -p 26379
 127.0.0.1:26379> sentinel failover mymaster
 127.0.0.1:26379> sentinel flushconfig mymaster
 ```
+
+## redis持久化
+
+```bash
+# rdb模式 半持久化 丢失最后一次快照后的所有操作
+# 使用fork复制父进程的副本，操作系统使用copy-on-write策略，故而rdb文件为fork时的内存数据
+# 快照时不会修改rdb文件，快照结束后替换旧文件。可以手动 `save` `bgsave`执行快照，前者主进程/阻塞其他请求，后者fork
+# redis启动后会读取rdb文件
+save 900 1 # 900s内至少1个键被更改则快照
+save 300 10 # 300s内至少10个
+# save之间是 或 的关系
+dir /path/to/snapshotdir/
+dbfilename dump.rdb
+rdbcompression yes
+
+# aof模式 全持久化 开启后每执行更改redis数据的命令，都会将该命令写入aof文件
+# redis启动时逐个执行aof文件的命令以加载硬盘数据到内存，相对rdb文件较慢
+dir /path/to/snapshotdir/
+appendonly yes
+appendfilename appendonly.aof
+appendfsync always # 每次执行写入都执行同步，最安全 最慢 # everysec 每秒 no 操作系统决定/30s
+auto-aof-rewrite-percentage 100 # 当aof文件超过上一次重写时的大小的多少百分比时再次进行重写
+# 在aof文件在一定大小之后，重新将整个内存写到aof文件当中，以反映最新的状态 相当于`bgsave`
+auto-aof-rewrite-min-size 64MB # 允许重写的最小大小 初始化启动redis有效 后续依据aof文件大小
+
+## redis可同时开启rdb和aof，重新启动后使用aof文件恢复数据 rdb可用于备份
+```
