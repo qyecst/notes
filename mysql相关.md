@@ -100,6 +100,46 @@ default-character-set=utf8
 !includedir /etc/mysql/conf.d/
 ```
 
+## 主从配置
+
+```bash
+## 主
+# /etc/my.cnf | my-large.cnf
+[mysqld]
+server-id = 1
+log-bin = mysql-bin
+
+> grant replication slave on *.* to 'replica'@'%' identified by 'pwd';
+> flush privileges;
+> show master status;
+# file:mysql-bin.00002 position: 123
+
+#> use database_name; # 数据库
+> flush tables with read lock; # 锁定表/读锁
+mysqldump -uroot -pxxx database_name > database_name.sql # 导出数据
+> unlock tables; # 解锁表
+
+## 从
+# /etc/my.cnf | my-large.cnf
+[mysqld]
+server-id = 2
+#replicate_wild_do_table=test.% #只同步test库下的表
+#relay_log=mysqld-relay-bin #记录中继日志
+#log-slave-updates=YES #从服务器同步后记录日志
+
+> create database database_name;
+> use database_name;
+> source database_name.sql; # 导入数据
+
+> change master to master_host='192.168.1.1',
+                   master_user='replica',
+                   master_password='pwd',
+                   master_log_file='mysql-bin.00002',
+                   master_log_pos=123;
+> slave start;
+> show slave status;
+```
+
 ## binlog常用操作
 
 ```mysql
@@ -156,4 +196,37 @@ CREATE USER 'user' IDENTIFIED WITH mysql_native_password BY 'passwd';
 ALTER USER 'root'@'%' IDENTIFIED BY 'password' PASSWORD EXPIRE NEVER;
 ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
 FLUSH PRIVILEGES;
+```
+
+## 其他操作
+
+```mysql
+# 索引，查询块更新慢
+ALTER TABLE t1 ADD PRIMARY KEY('column'); # 主键
+ALTER TABLE t1 ADD UNIQUE('column'); # 唯一索引
+ALTER TABLE t1 ADD INDEX index_name('column'); # 普通索引
+ALTER TABLE t1 ADD FULLTEXT('column'); # 全文索引 MyISAM
+ALTER TABLE t1 ADD INDEX index_name('column','column2'); # 组合索引
+
+DROP INDEX index_name ON t1; # 删除
+ALTER TABLE t1 DROP INDEX index_name;
+ALTER TABLE t1 DROP PRIMARY KEY;
+
+SHOW INDEX FROM t1; # 查看
+SHOW KEYS FROM t1;
+
+# 慢查询
+show variables like '%slow%';
+show variables like '%long_query%';
+
+set global slow_query_log = on;
+
+## /etc/my.cnf
+[mysqld]
+slow_query_log = ON # 开启
+slow_query_log_file = /usr/local/mysql/data/slow.log # log文件
+long_query_time = 1 # '慢'时间定义
+log_queries_not_using_indexes = OFF # 如果ON 记录所有没有利用索引的查询，前提slow_query_log为ON
+
+mysqldumpslow -s t -t 5 /path/to/logfile
 ```
