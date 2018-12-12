@@ -15,8 +15,15 @@
 ### 初始化
 
 ```bash
+systemctl start mysqld
+systemctl start mariadb
+
 # datadir数据文件路径 basedir安装路径
-mysql --initialize-insecure --user=mysql --basedir=/usr/local/mysql --datadir=/data/mysql
+#mysql --initialize-insecure --user=mysql --basedir=/usr/local/mysql --datadir=/data/mysql
+
+#mysql_install_db --user=mysql --datadir=/data/mysql
+#mysqladmin -u root password 'new-password'
+mysql_secure_installation
 ```
 
 ### 安装：
