@@ -141,3 +141,18 @@ mysql -u<user_name> -p<user_pwd> -v < /path/db.bak.sql;
 mysqlbinlog  /path/mysql_binlog.00001 | mysql -u<user_name> -p<user_pwd> -v db_name
 mysqlbinlog --stop-position=953 --database=db_name /path/mysql_binlog.00001 | mysql -u<user_name> -p<user_pwd> -v db_name
 ```
+
+## 用户相关操作
+
+```mysql
+# mysql 5.x
+CREATE USER 'user' IDENTIFIED BY 'u_passwd';
+GRANT ALL PRIVILEGES ON db.* TO 'user'@'%' IDENTIFIED BY 'passwd';
+REVOKE ALL PRIVILEGES ON db.* FROM 'user'@'%';
+
+# mysql 8.x
+CREATE USER 'user' IDENTIFIED WITH mysql_native_password BY 'passwd';
+ALTER USER 'root'@'%' IDENTIFIED BY 'password' PASSWORD EXPIRE NEVER;
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
+FLUSH PRIVILEGES;
+```
