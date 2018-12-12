@@ -7,7 +7,8 @@
         "mysql"
     ],
     "info": [
-        "mysql/mariadb cluster//todo"
+        "mysql/mariadb cluster//todo",
+        "mysql proxy//todo"
     ]
 }
 -->
