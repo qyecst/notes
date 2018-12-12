@@ -22,7 +22,14 @@ LAMP：
 
 apache：`./configure --prefix=path/to/apache --enable-so --enable-rewrite --enable-charset-lite --enable-cgi [.etc]`
 
-php：`./configure --prefix=path/to/php --with-zlib --with-apxs2=path/to/apache/bin/apxs --with-mysql=path/to/mysql --with-config-file-path=/usr/local/php --enable-mbstring --enable-fpm [.etc]`
+php：
+```bash
+./configure --prefix=path/to/php --with-zlib --with-apxs2=path/to/apache/bin/apxs --with-mysql=path/to/mysql --with-config-file-path=/usr/local/php --enable-mbstring --enable-fpm [.etc]
+
+./configure --prefix=path/to/php --with-zlib --with-apxs2=path/to/apache/bin/apxs \
+--with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd \
+--with-config-file-path=/usr/local/php --enable-mbstring --enable-fpm [.etc]
+```
 
 mysql：`/usr/local/mysql/scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data` & `cp support-files/my-medium.cnf /etc/my.cnf`
 
