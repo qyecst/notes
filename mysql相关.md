@@ -2,7 +2,7 @@
 {
     "title": "mysql相关",
     "create": "2018-05-16 15:02:26",
-    "modify": "2018-12-02 19:40:55",
+    "modify": "2018-12-12 19:26:25",
     "tag": [
         "mysql"
     ],
@@ -14,7 +14,10 @@
 
 ### 初始化
 
-`mysql --initialize-insecure --user=mysql --basedir=/usr/local/mysql --datadir=/data/mysql`
+```bash
+# datadir数据文件路径 basedir安装路径
+mysql --initialize-insecure --user=mysql --basedir=/usr/local/mysql --datadir=/data/mysql
+```
 
 ### 安装：
 
