@@ -2,7 +2,7 @@
 {
     "title": "ssh相关",
     "create": "2018-05-16 15:02:26",
-    "modify": "2018-12-02 19:40:55",
+    "modify": "2018-12-13 22:49:07",
     "tag": [
         "ssh"
     ],
@@ -45,4 +45,16 @@ MaxStartups 5 # 设置同时发生的未验证的并发量
 LoginGraceTime 15s # 15秒内客户端不能登录即登录超时，切断连接
 AllowUsers u_user # 仅允许这些用户登录，而拒绝其它所有用户。处理顺序DenyUsers, AllowUsers, DenyGroups, AllowGroups
 # AllowGroups <xxx> # 用空格分隔的组名列表，可用*和?通配符，仅允许这些组中的成员登录
+```
+
+## 使用公钥/禁用密码
+
+```ssh
+RSAAuthentication yes # 允许RSA验证(文档中找不到此设置，是否废弃存疑)
+PubkeyAuthentication yes # 允许公钥验证
+AuthorizedKeysFile .ssh/authorized_keys # 公钥验证文件的路径
+
+ChallengeResponseAuthentication no # 禁用质疑-应答认证
+PasswordAuthentication no # 禁用密码认证
+UsePAM no # 禁用pam模块
 ```
