@@ -2,7 +2,7 @@
 {
     "title": "elk接入交换机&路由器等网络设备日志",
     "create": "2018-12-03 23:37:34",
-    "modify": "2018-12-03 23:37:34",
+    "modify": "2018-12-13 23:00:34",
     "tag": [
         "elk",
         "elasticsearch",
@@ -115,6 +115,24 @@ output {
         hosts => [ "elasticsearch:9200" ]
     }
 }
+```
+
+```logstash
+if [type] == "cisco"{
+    grok{
+        match => {
+            "message" => "<%{BASE10NUM:syslog_pri}>%{NUMBER:log_sequence}: %{SYSLOGTIMESTAMP:timestamp}: %%{DATA:facility}-%{POSINT:severity}-%{CISCO_REASON:mnemonic}: %{GREEDYDATA:message}"
+            }
+        add_field => {
+            "severity_code" => "%{severity}"
+            }
+        overwrite => ["message"]
+    }
+}
+
+# 自动生成grok表达式网站/测试grok表达式网站
+# http://grokconstructor.appspot.com/do/match
+# https://grokdebug.herokuapp.com/
 ```
 
 ## elk的docker-compose文件
