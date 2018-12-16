@@ -17,10 +17,19 @@
 ```bash
 # 依赖
 yum install zlib-devel pcre-devel openssl-devel
+
 # 添加用户
 useradd -M -s /sbin/nologin nginx
+
 # 配置
-./configure --prefix=/usr/local/nginx --sbin-path=/usr/local/nginx/sbin/nginx --conf-path=/usr/local/nginx/conf/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx/nginx.pid --lock-path=/var/lock/nginx.lock --user=nginx --group=nginx --with-http_ssl_module --with-http_stub_status_module --with-http_gzip_static_module --http-client-body-temp-path=/var/tmp/nginx/client/ --http-proxy-temp-path=/var/tmp/nginx/proxy/ --http-fastcgi-temp-path=/var/tmp/nginx/fcgi/ --http-uwsgi-temp-path=/var/tmp/nginx/uwsgi --http-scgi-temp-path=/var/tmp/nginx/scgi --with-pcre
+./configure --prefix=/usr/local/nginx --user=nginx --group=nginx --with-http_ssl_module --with-http_stub_status_module
+
+#./configure --prefix=/usr/local/nginx --sbin-path=/usr/local/nginx/sbin/nginx --conf-path=/usr/local/nginx/conf/nginx.conf \
+#   --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx/nginx.pid \
+#   --lock-path=/var/lock/nginx.lock --user=nginx --group=nginx --with-http_ssl_module --with-http_stub_status_module \
+#   --with-http_gzip_static_module --http-client-body-temp-path=/var/tmp/nginx/client/ --http-proxy-temp-path=/var/tmp/nginx/proxy/ \
+#   --http-fastcgi-temp-path=/var/tmp/nginx/fcgi/ --http-uwsgi-temp-path=/var/tmp/nginx/uwsgi --http-scgi-temp-path=/var/tmp/nginx/scgi --with-pcre
+
 # 编译&安装
 make clean
 make -j [num_of_processes]
@@ -43,6 +52,48 @@ yum install nginx
 apt install nginx
 ```
 
+## 常用操作
+
+```bash
+nginx -t # 检测配置文件语法
+nginx -s reload # 重新加载配置
+# nginx -s [stop|quit|reopen|reload]
+```
+
+## 日志分析
+
+```bash
+# 统计独立ip数
+awk '{print $1}' access.log | sort -r | uniq -c | wc -l
+
+# 统计pv
+awk '{print $1}' access.log | wc -l
+
+# 统计uv
+awk '{print $1}' access.log | sort -r | uniq -c | wc -l
+
+# 统计访问前20ip
+awk '{print $1}' access.log | sort | uniq -c | sort -nr | head -20
+
+# 统计9点到12点访问量
+?????
+
+# 统计状态码，打印大于20此的IP
+awk '{if($9~/502|499|500|503|404/)print $1,$9}' access.log | sort | uniq -c | sort -nr | awk '{if($1>20)print $2}'
+
+# 分析请求时间大于5s的url，打印url 时间 ip # NR当前行数 NF字段总数 $NF最后一个Field RT指定的那个分隔符 RS记录分隔符 ORS记录输出分隔符 FS分隔符 OFS列输出分隔符
+# log_format main '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for" "$request_time"';
+awk '{if($NF>5)print $NF,$7,$1}' access.log | sort -nr
+```
+
+## 日志切分
+
+```
+cp log log.bak.<date> && echo -n > log
+# kill -USR1 <nginx.pid>
+# bash脚本定时执行
+```
+
 ## nginx配置
 
 ```nginx
@@ -50,7 +101,9 @@ apt install nginx
 user  nginx nginx;
 
 ## nginx进程数，建议设置为等于CPU总核心数 [auto]
-worker_processes  1;
+worker_processes  8;
+## 为进程分配cpu，每个进程1个cpu
+worker_cpu_affinity 00000001 00000010 00000100 ... 10000000;
 
 ## 进程pid文件
 pid  /var/run/nginx.pid;
@@ -78,6 +131,9 @@ events {
 http {
     ## 关闭版本信息
     server_tokens  off;
+
+    ## 开启目录列表访问
+    # autoindex on;
 
     ## 默认编码
     charset  utf-8;
@@ -336,8 +392,6 @@ http {
 
 ## nginx代理
 
-后端服务器：
-
 ```nginx
 http {
     upstream <group_name> {
@@ -350,18 +404,33 @@ http {
             root <path>;
             index index.html;
             proxy_pass http://<group_name>;
+            # 后端服务器返回504/502/超时等错误，自动将请求转发upstream的另一台服务器/故障转移
+            proxy_next_upstream http_502 http_504 error timeout invalid_header;
+            # proxy_redirect http://192.168.1.154:8080/ http://www.test.com/;
         }
     }
 }
 ```
 
-负载均衡：权重、轮询、iphash .etc
+## 负载均衡
+
+权重、轮询、iphash .etc
 
 ```nginx
 http {
+    upstream <group_name> { # 轮询
+        server 192.168.0.10:88;
+        server 192.168.0.11;
+        # .etc
+    }
     upstream <group_name> { # 权重
         server 192.168.0.10:88 weight=2;
         server 192.168.0.11 weight=4;
+        # .etc
+    }
+    upstream <group_name> {
+        server 192.168.0.10:88 weight=2 max_fails=2 fail_timeout=30s;
+        server 192.168.0.11 weight=4 max_fails=2 fail_timeout=30s;
         # .etc
     }
     upstream <group_name> { # iphash
@@ -413,4 +482,167 @@ location / {
 # #socket=127.0.0.1:80
 # chmod-socket=660
 # #stats=127.0.0.1:9001
+```
+
+## nginx升级/降级
+
+```bash
+nginx -V # 获取编译参数
+./configure --prefix=...etc # 使用所需编译参数
+make # 构建
+# 备份旧版nginx可执行文件，复制新版
+mv /path/to/nginx/binary/nginx /path/to/backup/nginx.bak
+cp path/to/new/nginx /path/to/nginx
+# 测试新版本是否正常
+/path/to/new/nginx -t
+# 重启nginx
+```
+
+## 设定查看nginx状态
+
+```nginx
+location /nginxstatus {
+    stub_status on;
+}
+```
+
+## location匹配规则
+
+```nginx
+ = 字面精确匹配
+ ^~ 最大前缀匹配
+ ~ 区分大小写
+ ~* 不区分大小写
+ !~ 区分大小写不匹配
+ !~* 不区分大小写不匹配
+# location = 匹配 > location 完整路径 > location ^~ 路径 > location ~ ~* 正则 > location 部分起始路径 > location / 路径
+
+location = / {
+    ...etc;
+    # 只会匹配/，比location / 低
+}
+location = /index.html {
+    ...etc;
+    # 只会匹配/index.html，最高优先级
+}
+location = /images/ {
+    ...etc;
+    # 匹配以/images/开始的请求，并停止其他匹配
+}
+location ~ .*\.(html|txt|gif|jpg|jpeg|png)$ {
+    ...etc;
+    # 匹配以上述结尾的url请求，但是/images/的请求会被上述location处理
+}
+location / {
+    ...etc;
+    # 匹配任何请求，请求都以/开头
+    # 优先级最低
+}
+```
+
+## nginx rewrite/nginx重写规则
+
+```nginx
+ last # 表示完成匹配
+ break # 本规则匹配后终止匹配
+ redirect # 返回302临时重定向
+ permanent # 返回301永久重定向
+
+# nginx.conf | vhosts.conf
+
+# test.com跳转www.test.com
+if ($host = 'test.com') {
+    rewrite ^/(.*)$ http://www.test.com/$1 permanent;
+}
+
+# 访问 www.test.com跳转www.test1.com/index.html
+rewrite ^/$ http://www.test1.com/index.html permanent;
+
+# 访问 /test/dir/跳转至/other.html 且浏览器地址不变
+rewrite ^/test/dir/$ /other.html last;
+
+# 多域名跳转
+if ($host != 'www.test.com') {
+    rewrite ^/(.*)$ http://www.test.com/$1 permanent;
+}
+
+# 访问不存在的跳转至index.html
+if ( ! -e $request_filename) {
+    rewrite ^/(.*)$ /index.html last;
+}
+
+# 目录替换 /xxx/123 => /xxx?id=123
+rewrite ^/(.+)/(\d+) /$1?id=$2 last;
+
+# 判断浏览器ua
+if ($http_user_agent ~ MSIE) {
+    rewrite ^(.*)$ /ie/$1 break;
+}
+
+# 禁止访问
+location ~ .*\.(sh|flv|mp3)$ {
+    return 403;
+}
+
+# 移动端跳转
+if ($http_user_agent ~* "(Android)|(iPhone)|(Mobile)|(WAP)|(UCWEB)") {
+    rewrite ^/(.*)$ http://m.test.com/$1 permanent;
+}
+
+# 匹配url跳转
+if ($args ~* tid=12) {
+    return 404;
+}
+```
+
+## 防盗链
+
+```nginx
+# 如果valid_referers列表中没有Referer头的值 $invalid_referer 将被设置为1
+location ~ .*\.(gif|jpg|png|swf|flv) {
+    valid_referers none blocked test.com *.test.com;
+    # none没有referers直接通过浏览器访问/其他工具访问
+    # blocked有，但是被代理服务器或防火墙隐藏
+    # 域名 通过指定域名访问的
+    if ($invalid_referer) {
+        return 403;
+        # rewrite ^/ http://www.test.com/403.html;
+    }
+}
+
+location ~* \.(gif|jpg|png|swf|flv) {
+    if ($host != '*.test.com') {
+        return 403;
+    }
+}
+```
+
+## nginx的ssl/https
+
+```bash
+# 生成ssl证书
+openssl genrsa -des3 -out server.key 1024
+# 生成csr
+openssl req -new -key server.key -out server.csr
+# 去除口令，nginx使用
+mv server.key server.key.bak
+openssl rsa -in server.key.bak -out server.key
+# 生成自签证书
+openssl x509 -req -days 10240 -in server.csr -signkey server.key -out server.crt
+
+# 配置nginx的ssl
+server {
+    listen 443 ssl;
+    server_name www.test.com;
+    ssl_certificate /path/to/server.crt;
+    ssl_certificate_key /path/to/server.key;
+    ssl_session_cache shared:SSL:1m;
+    ssl_session_timeout 5m;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    location / {
+        root html;
+        index index.html;
+    }
+}
 ```
