@@ -2,7 +2,7 @@
 {
     "title": "dnsmasq相关",
     "create": "2018-05-16 14:30:06",
-    "modify": "2018-05-16 14:30:06",
+    "modify": "2018-12-16 22:38:25",
     "tag": [
         "dnsmasq",
         "dns"
@@ -51,7 +51,7 @@ min-cache-ttl=600
 # 使用alpine，体积小
 FROM alpine:3.8
 
-# 换速度快的源，安装bind
+# 换速度快的源，安装dnsmasq
 RUN echo "http://mirrors.aliyun.com/alpine/v3.8/main/" > /etc/apk/repositories && \
     apk --update add dnsmasq
 
