@@ -985,7 +985,9 @@ i # 忽略大小写
 awk [options] 'command' file1, file2, ...etc
 ```
 
-## 优化linux文件打开数量
+## 常见优化参数
+
+### 优化linux文件打开数量
 
 ```bash
 ulimit -n 65535 # 重启失效
@@ -1002,3 +1004,5 @@ ulimit -Hn # 查看限制数量
 echo [max_num] > /proc/sys/fs/file-max # 可以写在rc.local 开机执行
 # systemd => /lib/systemd/system/[rc-local.service|rc.local.service] 开机执行脚本
 ```
+
+## 常见问题处理
