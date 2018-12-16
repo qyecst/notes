@@ -2,7 +2,7 @@
 {
     "title": "linux相关",
     "create": "2018-06-01 07:35:09",
-    "modify": "2018-12-02 19:40:55",
+    "modify": "2018-12-16 23:25:13",
     "tag": [
         "linux"
     ],
@@ -983,4 +983,22 @@ g # 所有
 i # 忽略大小写
 # awk文本处理
 awk [options] 'command' file1, file2, ...etc
+```
+
+## 优化linux文件打开数量
+
+```bash
+ulimit -n 65535 # 重启失效
+
+# vim /etc/security/limits.conf
+* soft nproc 65535 # 软限制 最大进程数
+* hard nproc 65535 # 硬限制 最大进程数
+* soft nofile 65535 # 软限制 最大文件描述符
+* hard nofile 65535 # 硬限制 最大文件描述符
+
+ulimit -Hn # 查看限制数量
+
+# 对linux系统设置打开文件数
+echo [max_num] > /proc/sys/fs/file-max # 可以写在rc.local 开机执行
+# systemd => /lib/systemd/system/[rc-local.service|rc.local.service] 开机执行脚本
 ```
