@@ -1005,4 +1005,113 @@ echo [max_num] > /proc/sys/fs/file-max # 可以写在rc.local 开机执行
 # systemd => /lib/systemd/system/[rc-local.service|rc.local.service] 开机执行脚本
 ```
 
+### 内核参数
+
+```bash
+# vim /etc/sysctl.conf
+# sysctl -p
+
+net.ipv4.ip_forward=0|1 # 关闭|开启路由转发
+net.ipv4.tcp_timestamps=1 # 控制RFC1323时间戳和窗口缩放
+net.ipv4.tcp_sack=1 # 选择性应答SACK tcp可选特性/提高某些网络可用带宽效率
+net.ipv4.tcp_fack=1 # 打开Forward ACK拥塞避免和快速重传功能
+net.ipv4.tcp_retrans_collapse=1 # 打开重传重组包功能
+net.ipv4.tcp_syn_retries=5 # 对于新建一个链接，发送多少syn后放弃
+net.ipv4.tcp_synack_retries=5 # 回应syn时，发送多少syn.ack后放弃
+net.ipv4.tcp_max_orphans=131072 # 系统所处理不属于任何进程的tcp sockets数量
+net.ipv4.tcp_max_tw_buckets=5000 # 系统同时保持time_wait状态套接字的数量
+net.ipv4.tcp_keepalive_time=30 # tcp链接空闲30s后发起probe查探
+net.ipv4.tcp_keepalive_probes=3 # 若3次probes查探不成功，放弃链接
+net.ipv4.tcp_keepalive_intvl=3 # 每次probes为3s
+net.ipv4.tcp_retries1=3 # 重试3次后，放弃回应tcp连接请求
+net.ipv4.tcp_retries2=3 # 重试3次后，放弃已建立通信的tcp链接
+net.ipv4.tcp_fin_timeout=30 # 决定己方发起关闭时的fin_wait2时间
+net.ipv4.tcp_tw_recycle=1 # 开启time_wait sockets的快速回收Enabling this option is not recommended since this causes problems when working with NAT
+net.ipv4.tcp_max_syn_backlog=8192 # 表示syn队列的长度
+net.ipv4.tcp_syncookies=1 # 收到最初syn时会检查程序的backlog是否满，开启可解决can't connect问题，但是time_wait会变为 2个最大报文生存时间
+net.ipv4.tcp_orphans_retries=0 # 关闭tcp链接前重试次数
+net.ipv4.tcp_mem=178368 237824 356736 # 表示低于[0]时没有内存压力，[1]时进入内存压力阶段，[2]高于时拒绝分配sockets
+net.ipv4.tcp_tw_reuse=1 # 开启time_wait的sockets重用
+net.ipv4.ip_local_port_range=1024 65000 # 表示向外链接的端口范围
+net.ipv4.ip_conntrack_max=655360 # netfilter可以同时处理的链接跟踪条目
+net.ipv4.icmp_ignore_bogus_error_response=1 # 开启恶意icmp错误消息保护
+net.ipv4.tcp_syncookies=1 # 开启syn洪水攻击保护
+```
+
 ## 常见问题处理
+
+```bash
+# net.ipv4.tcp_max_tw_buckets
+# TCP: time wait bucket table overflow
+# time_wait的sockets过多，需增大net.ipv4.tcp_max_tw_buckets的值
+vim /etc/sysctl.conf => sysctl -p
+net.ipv4.tcp_max_buckets=655350
+
+# socket: Too many open files (24)
+# 调整用户/进程最大打开文件数
+/etc/security/limits.conf
+* soft nproc 65535
+* hard nproc 65535
+* soft nofile 65535
+* hard nofile 65535
+
+# kernel: possible SYN flooding on port 80. Sending cookies.
+# syn队列已满，触发了syncookies
+/etc/sysctl.conf
+net.ipv4.tcp_fin_timeout=30
+net.ipv4.tcp_keepalive_time=1200
+net.ipv4.tcp_syncookies=1
+net.ipv4.tcp_tw_reuse=1
+net.ipv4.tcp_tw_recycle=1 # Enabling this option is not recommended since this causes problems when working with NAT
+net.ipv4.ip_local_port_range=1024 65000
+net.ipv4.tcp_max_syn_backlog=8192
+net.ipv4.tcp_max_tw_buckets=8000
+net.ipv4.tcp_synack_retries=2
+net.ipv4.tcp_syn_retries=2
+
+# nf_conntrack: table full, gropping packet.
+# netfilters跟踪连接数过高，超出系统限制
+modprobe nf_conntrack
+/etc/sysctl.conf
+net.nf_conntrack_max=655360
+net.netfilter.nf_conntrack_tcp_timeout_established=36000
+# old version
+modprobe ip_conntrack
+/etc/sysctl.conf
+net.ipv4.ip_conntrack_max=655350
+net.ipv4.netfilter.ip_conntrack_tcp_timeout_established=10800
+```
+
+## 常见性能评估/优化
+
+```bash
+# 内存/cpu/磁盘io/网络io .etc
+# nginx/mysql/tomcat/php .etc
+# vmstat sar iostat netstat free ps top iftop ss
+
+uptime
+# load average: 1min 5min 15min
+
+vmstat -w 1 10 # -w宽模式显示 1间隔 10次数
+# r运行/等待cpu时间片的进程数 b处在不可中断睡眠状态的进程数/等待资源、网络、磁盘等
+# swpd使用的虚拟内存数
+# si从磁盘swap读入内存数 so从内存写入磁盘swap数
+# bi读块设备 bo写块设备
+# in中断次数 cs上下文切换数 例:调用系统函数，上下文切换
+
+free -m # -m以MB为单位 -g以GB为单位
+
+iostat -d 1 10 # -d 1间隔 10次数
+# tps操作次数 blk_read/s读取块 blk_wrtn/s写入块 blk_read读取总块数 blk_wrtn写入总块数
+
+sar -d 1 10 # -d磁盘 -p显示磁盘名 -u为cpu -v为inode等 -r内存等 -b为io等
+# tps操作次数 rd_sec/s读扇区次数 wr_sec/s写扇区 avgrq-sz平均io操作扇区大小 avgqu-sz磁盘请求队列平均长度
+# await从请求磁盘操作到系统完成处理,每次请求的平均消耗时间，包括请求队列中时间 svctm系统处理每次请求的平均时间,不包括请求队列中时间
+# util为I/O请求占CPU的百分比
+
+ping
+
+netstat -i | ip link | ip addr | ip route | sar -n [DEV|EDEV|IP|EIP .etc]
+
+iftop -i <net_device|ens0p666>
+```
