@@ -233,3 +233,52 @@ log_queries_not_using_indexes = OFF # 如果ON 记录所有没有利用索引的
 
 mysqldumpslow -s t -t 5 /path/to/logfile
 ```
+
+## 数据库备份
+
+### cp备份
+
+```bash
+# cp文件备份
+cp /var/lib/mysql/* /bak/mysql/
+```
+
+### mysqldump备份
+
+```bash
+mysqldump -uroot -p123 --all-databases --opt --single-transaction > `date +"%Y%m%d.%T".sql
+# --opt快捷选项--add-drop-tables --add-locking --create-option --disable-keys --extended-insert --lock-tables --quick --set-charset 默认开启，--skip-opt禁用
+# myisam表--lock-tables锁表以备份
+```
+
+### xtrabackup备份
+
+```bash
+# xtrabackup innobackupex
+# https://www.percona.com/software/mysql-database/percona-xtrabackup
+## 完全备份
+innobackupex --defaults-file=/etc/my.cnf --user=root --password=123456 /data/bak/ # 生成<datestamp.dir>的目录
+# 恢复前保证数据一致性
+innobackupex --defaults-file=/etc/my.cnf --user=root --password=123456 --apply-log /data/bak/<datestamp.dir>
+# 恢复，关闭数据库并删除数据文件
+innobackupex --defaults-file=/etc/my.cnf --user=root --password=123456 --copy-back [--rsync] /data/bak/<datestamp.dir>
+chown -R mysql.mysql /var/lib/mysql
+
+## 增量备份
+# 先完全备份
+innobackupex --user=root --password=123456 --databases=some_db /data/bak/ # 生成<datestamp.dir>的目录 --databases多个库之间以空格隔开
+# 增量备份
+innobackupex --defaults-file=/etc/my.cnf --user=root --password=123456 --databases=some_db --increamental /data/bak/ --increamental-basedir=/data/bak/<datestamp.dir> [--parallel=2]
+# 再次增量
+innobackupex --defaults-file=/etc/my.cnf --user=root --password=123456 --databases=some_db --increamental /data/bak/ --increamental-basedir=/data/bak/<datestamp.dir2> [--parallel=2]
+# 增量恢复，准备一个全备，开始恢复的增量备份要添加--redo-only参数，到最后一次增量备份要去掉--redo-only
+innobackupex --defaults-file=/etc/my.cnf --user=root --password=123456 --apply-log --redo-only /data/bak/<datestamp.dir>
+# 增量1应用到完全备份，加--redo-only
+innobackupex --apply-log --redo-only /data/bak/<datestamp.dir> --incremental-dir=/data/bak/<datestamp.dir2>
+# 最后增量应用到完全备份，不加--redo-only
+innobackupex --apply-log /data/bak/<datestamp.dir> --incremental-dir=/data/bak/<datestamp.dir{3...n}>
+# 所有合在一起的完全备份整体进行一次apply
+innobackupex --apply-log /data/bak/<datestamp.dir>
+# 恢复数据
+innobackupex --defaults-file=/etc/my.cnf --user=root --password=123456 --copy-back [--rsync] /data/bak/<datestamp.dir>
+```
