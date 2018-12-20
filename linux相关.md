@@ -1040,13 +1040,40 @@ net.ipv4.tcp_syncookies=1 # 开启syn洪水攻击保护
 
 ## 常见问题处理
 
+### 修改网卡名
+
+```bash
+vim /etc/sysconfig/grub
+GRUB_CMDLINE_LINUX="... net.ifnames=0 biosdevname=0"
+grub2-mkconfig -o /boot/grub2/grub.cfg
+cp ifcfg-eno166666 ifcfg-eth0
+DEVICE=eth0
+```
+
+### 修改密码
+
+```bash
+grub => e
+ro crashkernel => rw init=/sysroot/bin/sh
+Ctrl + X
+chroot /sysroot
+passwd root
+touch /.autorelabel
+```
+
+### TCP: time wait bucket table overflow
+
 ```bash
 # net.ipv4.tcp_max_tw_buckets
 # TCP: time wait bucket table overflow
 # time_wait的sockets过多，需增大net.ipv4.tcp_max_tw_buckets的值
 vim /etc/sysctl.conf => sysctl -p
 net.ipv4.tcp_max_buckets=655350
+```
 
+### socket: Too many open files (24)
+
+```bash
 # socket: Too many open files (24)
 # 调整用户/进程最大打开文件数
 /etc/security/limits.conf
@@ -1054,7 +1081,11 @@ net.ipv4.tcp_max_buckets=655350
 * hard nproc 65535
 * soft nofile 65535
 * hard nofile 65535
+```
 
+### kernel: possible SYN flooding on port 80. Sending cookies
+
+```bash
 # kernel: possible SYN flooding on port 80. Sending cookies.
 # syn队列已满，触发了syncookies
 /etc/sysctl.conf
@@ -1068,7 +1099,11 @@ net.ipv4.tcp_max_syn_backlog=8192
 net.ipv4.tcp_max_tw_buckets=8000
 net.ipv4.tcp_synack_retries=2
 net.ipv4.tcp_syn_retries=2
+```
 
+### nf_conntrack: table full, gropping packet
+
+```bash
 # nf_conntrack: table full, gropping packet.
 # netfilters跟踪连接数过高，超出系统限制
 modprobe nf_conntrack
