@@ -121,37 +121,3 @@ dhcp samba dns apache mysql nginx zabbix squid varnish lvs keepalived elk mq zoo
 
 常用：
 iptables/firewalld ntp/chrony
-timedatectl set-timezone
-localectl set-locale LANG=zh_CN.utf8
-systemctl start|stop|reload|restart|enable|disable|list-unit-files|kill|poweroff|rescue|set-default
-
-修改网卡名：
-vim /etc/sysconfig/grub
-GRUB_CMDLINE_LINUX="... net.ifnames=0 biosdevname=0"
-grub2-mkconfig -o /boot/grub2/grub.cfg
-cp ifcfg-eno166666 ifcfg-eth0
-DEVICE=eth0
-
-修改密码：
-grub => e
-ro crashkernel => rw init=/sysroot/bin/sh
-Ctrl + X
-chroot /sysroot
-passwd root
-touch /.autorelabel
-
-tar增量备份：
-tar -g /data/bak/snapshot -zcvf /data/bak/data.timestr.tgz -C /path/to/bak/dir/
-
-添加用户&密码：
-useradd <user_name> -p <密文>
-# useradd test -p $(openssl passwd 'pwd') && usermod -U test
-
-mount使用：
-mount -o remount,rw /mnt
-mount -t ntfs-3g /dev/sdc /mnt
-mount -t iso9660 -o loop centos.iso /mnt
-mount -t nfs 192.168.1.1:/data /mnt
-
-rsync使用：
-rsync -av /data root@192.168.1.1:/data/bak/dir/
