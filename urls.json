@@ -30,5 +30,6 @@
     "yum源设置.md": "0x0000001d",
     "zabbix相关.md": "0x0000001e",
     "shell相关.md": "0x0000001f",
-    "linux常用命令.md": "0x00000020"
+    "linux常用命令.md": "0x00000020",
+    "inotify&rsync实时同步.md": "0x00000021"
 }
