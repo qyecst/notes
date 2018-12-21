@@ -32,5 +32,6 @@
     "shell相关.md": "0x0000001f",
     "linux常用命令.md": "0x00000020",
     "inotify&rsync实时同步.md": "0x00000021",
-    "puppet相关.md": "0x00000022"
+    "puppet相关.md": "0x00000022",
+    "ansible相关.md": "0x00000023"
 }
