@@ -36,6 +36,90 @@ www.test.example.com
 ## 多模块管理
 ansible-doc -l # 查看模块
 ansible-doc <mod_name> # 查看模块帮助
+
+# vim /etc/ansible/ansible.cfg
+[defaults]
+inventory=/etc/ansible/hosts # 被控端hosts文件
+library=/usr/share/my_modules/ # 默认搜索模块位置
+remote_tmp=$HOME/.ansible/tmp # 远程执行临时文件
+pattern=* # 对所有主机通信
+forks=5 # 并行线程数
+poll_interval=15 # 轮询时间间隔
+sudo_user=root # sudo远程执行用户名
+ask_sudo_pass=True # 使用sudo是否输入密码
+ask_pass=True # 是否需要输入密码
+transport=smart # 通信机制
+remote_port=22 # 远程ssh端口
+module_lang=C # 模块和系统之间通信语言
+gathering=implicit # 控制默认facts收集/远程系统变量
+roles_path=/etc/ansible/roles # playbook搜索roles
+host_key_checking=False # 检测远程主机密钥
+# sudo_exe=sudo # sudo远程执行命令
+# sudo_flags=-H # 传递sudo之间参数
+timeout=10 # ssh超时时间
+remote_user=root # 远程登录用户名
+log_path=/var/log/ansible.log # 日志文件
+module_name=command # 默认模块
+# executable=/bin/sh # 执行的shell/用户shell模块
+# hash_behaviour=replace # 特定的优先级覆盖变量
+# jinja2_extensions # 是否开启jinja2扩展模块
+# private_key_file=/path/to/file # 私钥文件路径
+# display_skipped_hosts=True # 显示任何跳过任务的状态
+# system_warnings=True # 禁用系统运行ansible的警告
+# deprecation_warnings=True # 禁用输出不建议使用警告
+# command_warnings=True # 禁用command模块警告
+# nocolor=1 # 输出带颜色0开1关
+pipelining=False # 开启pipessh通道优化
+[accelerate] # 缓存加速
+accelerate_port=5099 # 加速端口
+accelerate_timeout=30 # 命令超时时间
+accelerate_connect_timeout=5.0 # 上一个活动链接时间min
+accelerate_daemon_timeout=30 # 允许最多私钥加载到daemon
+accelerate_multi_key=yes # 客户端连daemon需要开启
+```
+
+## 性能调整
+
+```bash
+## 关闭密钥检测
+# ssh链接会将公钥添加至.ssh/known_hosts
+host_key_checking=False
+
+## openssh链接
+# 关闭ssh的useDNS使得ssh链接不进行dns解析
+# /etc/ssh/sshd_config
+UseDNS no
+# 重启ssh systemctl restart sshd
+
+## ssh pipelining加速
+# 使用sudo时，需在被控端/etc/sudoers禁用requiretty
+piplining=True
+
+## ansible缓存优化
+# ansible在playbook会默认执行gather facts
+# playbooks的yaml文件添加
+gather_facts: nogather_facts: no
+# facts使用redis服务
+easy_install pip
+pip install redis
+# /etc/ansible/ansible.cfg
+gathering = smart
+fact_caching=redis
+fact_caching_timeout=86400
+fact_caching_connection=localhost:6379
+# fact_caching_connection=localhost:6379:0:admin
+# 执行playboos时会将facts key存入redis
+
+## controlpersist ssh跳转
+# 持久化的socket，一次验证多次通信/修改被控端ssh配置
+# $HOME/.ssh/config
+Host *
+    Compression yes
+    ServerAliveInterval 60
+    ServerAliveCountMax 5
+    ControlMaster auto
+    ControlPath ~/.ssh/sockets/%r@%h-%p
+    ControlPersist 4h
 ```
 
 ## 常用操作
@@ -498,4 +582,133 @@ ansible all -m systemd -a 'name=crond enabled=yes'
     "name": "crond", 
     "status": {
 }
+```
+
+## playbook剧本
+
+```bash
+target # 定义playbook的远程主机组
+    hosts # 远程主机组
+    user # 执行用户
+    sudo # 设置yes时，执行任务时有root权限
+    sudo_user # 指定sudo普通用户
+    connection # 默认基于ssh链接
+    gather_facks # 获取远程主机facts信息
+variable # 定义远程使用的变量
+    vars # var_name: var_value
+    vars_file # 变量文件
+    vars_prompt # 交互模式定义变量
+    setup # 模块取远程主机值
+task # 定义执行的任务列表
+    name # 任务名/屏幕显示信息
+    action # 执行的动作
+    copy # 复制文件到远程
+    template # 复制文件到远程/引用本地变量
+    service # 定义服务状态
+handler # 定义task后需要调用的任务
+
+### 安装nginx /2空格缩进
+- hosts: all
+  remote_user: root
+  tasks:
+    - name: t1
+      yum: name=nginx state=installed
+
+[root@localhost ~]# ansible-playbook a.yaml 
+PLAY [all] ******************************************************************************************
+TASK [Gathering Facts] ******************************************************************************
+ok: [127.0.0.1]
+TASK [t1] *******************************************************************************************
+ok: [127.0.0.1]
+PLAY RECAP ******************************************************************************************
+127.0.0.1                  : ok=2    changed=0    unreachable=0    failed=0   
+
+### 判断/安装/启动nginx
+- hosts: all
+  remote_user: root
+  tasks:
+    - name: t1
+      file: path=/usr/local/nginx/ state=directory
+      notify:
+        - nginx install
+        - nginx start
+  handlers:
+    - name: nginx install
+      shell: yum install nginx
+    - name: nginx start
+      shell: nginx
+
+PLAY [all] ******************************************************************************************
+TASK [Gathering Facts] ******************************************************************************
+ok: [127.0.0.1]
+TASK [t1] *******************************************************************************************
+ok: [127.0.0.1]
+PLAY RECAP ******************************************************************************************
+127.0.0.1                  : ok=2    changed=0    unreachable=0    failed=0   
+
+### 检测文件更新
+- hosts: all
+  remote_user: root
+  task:
+    - name: t1
+      copy: src=/etc/sysctl.conf dest=/tmp/
+      notify:
+        - source sysctl
+  handlers:
+    - name: source sysctl
+      shell: sysctl -p
+
+PLAY [all] ******************************************************************************************
+TASK [Gathering Facts] ******************************************************************************
+ok: [127.0.0.1]
+TASK [t1] *******************************************************************************************
+changed: [127.0.0.1]
+RUNNING HANDLER [source sysctl] *********************************************************************
+changed: [127.0.0.1]
+PLAY RECAP ******************************************************************************************
+127.0.0.1                  : ok=3    changed=2    unreachable=0    failed=0   
+
+### 创建用户
+- hosts: all
+  remote_user: root
+  tasks:
+    - name: t1
+      user: name={{item}} state=present
+      with_items:
+        - te1
+        - te2
+        - te3
+
+PLAY [all] ******************************************************************************************
+TASK [Gathering Facts] ******************************************************************************
+ok: [127.0.0.1]
+TASK [t1] *******************************************************************************************
+changed: [127.0.0.1] => (item=te1)
+changed: [127.0.0.1] => (item=te2)
+changed: [127.0.0.1] => (item=te3)
+PLAY RECAP ******************************************************************************************
+127.0.0.1                  : ok=2    changed=1    unreachable=0    failed=0   
+
+### template文件，判断/安装/修改
+# ansible hosts
+[web]
+1.1.1.1 http_port = 80
+2.2.2.2 http_port = 81
+
+cp nginx.conf nginx.conf.j2 # jinja2模板文件
+# 修改 listen 80; 为 listen {{http_port}};
+
+- hosts: all
+  remote_user: root
+  tasks:
+    - name: t1
+      file: path=/path/to/nginx state=directory
+      notify:
+        - nginx-install
+        - nginx-config
+  handlers:
+    - name: nginx-install
+      yum: name=nginx state=installed
+    - name: nginx-config
+      template: src=/path/to/nginx.conf.j2 dest=/etc/nginx/nginx.conf
 ```
