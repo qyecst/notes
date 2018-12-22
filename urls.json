@@ -33,5 +33,6 @@
     "linux常用命令.md": "0x00000020",
     "inotify&rsync实时同步.md": "0x00000021",
     "puppet相关.md": "0x00000022",
-    "ansible相关.md": "0x00000023"
+    "ansible相关.md": "0x00000023",
+    "jenkins相关.md": "0x00000024"
 }
