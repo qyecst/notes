@@ -34,5 +34,7 @@
     "inotify&rsync实时同步.md": "0x00000021",
     "puppet相关.md": "0x00000022",
     "ansible相关.md": "0x00000023",
-    "jenkins相关.md": "0x00000024"
+    "jenkins相关.md": "0x00000024",
+    "keepalived相关.md": "0x00000025",
+    "haproxy相关.md": "0x00000026"
 }
