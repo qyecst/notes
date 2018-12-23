@@ -8,7 +8,8 @@
         "redis",
         "mysql",
         "nginx",
-        "haproxy"
+        "haproxy",
+        "lvs"
     ],
     "info": []
 }
@@ -240,7 +241,89 @@ vrrp_instance VI_2 {
 }
 ```
 
-### redis+keepalived/nfs+keepalived/mysql+keepalived
+### 与其他服务组合
+
+#### lvs+keepalived配置
+
+```keepalived
+# 使用了keepalived.conf配置后，无需ipvsadm -A，配置均在conf文件内
+## 安装keepalived
+## 安装lvs
+
+## 配置
+global_defs {
+    notification_email {
+        root@localhost
+   }
+   notification_email_from root@localhost
+   smtp_server 127.0.0.1
+   smtp_connect_timeout 30
+   router_id LVS_DEVEL
+}
+vrrp_instance VI_1 {
+    state MASTER
+    interface ens33
+    lvs_sync_daemon_interface ens33
+    virtual_router_id 51
+    priority 100
+    advert_int 5
+    nopreempt
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        1.1.1.1
+    }
+}
+virtual_server 1.1.1.1 80{ # 定义对外提供服务的LVS的VIP以及port
+    delay_loop 6 # 设置健康检查时间，单位是秒
+    lb_algo wrr # 负载均衡方式W-RR
+    lb_kind DR # DR模式lvs
+    # nat_mask 255.255.255.0
+    persistence_timeout 60 # 持续60s
+    protocol TCP
+    real_server 2.2.2.2 80{
+        weight 100
+        TCP_CHECK{
+            connect_timeout 10
+            nb_get_retry 3 # 失败重试次数
+            delay_before_retry 3 # 失败重试的间隔时间
+            connect_port 80 # 连接的后端端口
+        }
+    }
+    real_server 3.3.3.3 80{
+        weight 100
+        TCP_CHECK{
+            connect_timeout 10
+            nb_get_retry 3 # 失败重试次数
+            delay_before_retry 3 # 失败重试的间隔时间
+            connect_port 80 # 连接的后端端口
+        }
+    }
+}
+
+# ========
+
+## backup的keepalived配置类似
+
+# ========
+## 更改tcp检测为http_get检测
+real_server 2.2.2.2{
+    weight 100
+    HTTP_GET{
+        connect_timeout 10
+        nb_get_retry 3
+        delay_before_retry 3
+        url{
+            path /path/to/monitor/check
+            status_code 200
+        }
+    }
+}
+```
+
+#### redis/nfs/mysql等与keepalived组合
 
 ```keepalived
 ## 安装redis/nfs/mysql
