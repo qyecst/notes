@@ -68,7 +68,7 @@ cd /path/data/ && inotifywait -mrq --format  '%Xe %w%f' -e modify,create,delete,
 do
     INO_EVENT=$(echo $file | awk '{print $1}') # 事件类型部分赋值INO_EVENT
     INO_FILE=$(echo $file | awk '{print $2}') # 文件路径部分赋值INO_FILE
-    echo "-------------------------------$(date +'%Y-%m-%d %T'): $file------------------------------------"
+    echo "-------------------------------$(date +'%F %T'): $file------------------------------------"
     # 增加、修改、写入完成、移动进事件
     if [[ $INO_EVENT =~ ('CREATE'|'MODIFY'|'CLOSE_WRITE'|'MOVED_TO') ]] ; then
         echo 'CREATE or MODIFY or CLOSE_WRITE or MOVED_TO'
