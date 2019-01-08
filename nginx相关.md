@@ -88,7 +88,7 @@ awk '{if($NF>5)print $NF,$7,$1}' access.log | sort -nr
 
 ## 日志切分
 
-```
+```bash
 cp log log.bak.<date> && echo -n > log
 # kill -USR1 <nginx.pid>
 # bash脚本定时执行

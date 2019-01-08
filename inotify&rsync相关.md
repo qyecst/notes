@@ -135,7 +135,7 @@ pid file = /var/run/rsyncd.pid # 指定rsync daemon的pid文件
 lock file = /var/run/rsync.lock # 指定锁文件
 log file = /var/log/rsyncd.log # 指定rsync的日志文件，而不把日志发送给syslog
 dont compress = *.gz *.tgz *.zip *.z *.Z *.rpm *.deb *.bz2 # 指定哪些文件不用进行压缩传输
- 
+
 # 下面指定模块，并设定模块配置参数，可以创建多个模块
 [mod1] # 模块ID
 path = /path/to/data/ # 指定该模块的路径，该参数必须指定。启动rsync服务前该目录必须存在。rsync请求访问模块本质就是访问该路径。

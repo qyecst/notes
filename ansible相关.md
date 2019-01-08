@@ -155,7 +155,7 @@ ansible all -k -m ping # 可使用ssh-copy-id -i .ssh/id_rsa.pub u_name@<u_ip> �
 
 # localhost不在all里
 127.0.0.1 | SUCCESS => {
-    "changed": false, 
+    "changed": false,
     "ping": "pong"
 }
 ```
@@ -218,18 +218,18 @@ group owner mode # 设置远程文件的用户组/用户/权限
 ansible all -k -m copy -a 'src=/etc/passwd dest=/tmp/ mode=755 owner=root'
 
 127.0.0.1 | CHANGED => {
-    "changed": true, 
-    "checksum": "b27d2f5924df8ec21f78ee14c076746d9d8b3838", 
-    "dest": "/tmp/passwd", 
-    "gid": 0, 
-    "group": "root", 
-    "md5sum": "f262fa40a82026c3a646159f85d9391f", 
-    "mode": "0755", 
-    "owner": "root", 
-    "secontext": "unconfined_u:object_r:admin_home_t:s0", 
-    "size": 1118, 
-    "src": "/root/.ansible/tmp/ansible-tmp-1545406728.22-10114933231732/source", 
-    "state": "file", 
+    "changed": true,
+    "checksum": "b27d2f5924df8ec21f78ee14c076746d9d8b3838",
+    "dest": "/tmp/passwd",
+    "gid": 0,
+    "group": "root",
+    "md5sum": "f262fa40a82026c3a646159f85d9391f",
+    "mode": "0755",
+    "owner": "root",
+    "secontext": "unconfined_u:object_r:admin_home_t:s0",
+    "size": 1118,
+    "src": "/root/.ansible/tmp/ansible-tmp-1545406728.22-10114933231732/source",
+    "state": "file",
     "uid": 0
 }
 
@@ -237,18 +237,18 @@ ansible all -k -m copy -a 'src=/etc/passwd dest=/tmp/ mode=755 owner=root'
 ansible all -k -m copy -a 'content="hello world" dest=/tmp/passwd mode=744'
 
 127.0.0.1 | CHANGED => {
-    "changed": true, 
-    "checksum": "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed", 
-    "dest": "/tmp/passwd", 
-    "gid": 0, 
-    "group": "root", 
-    "md5sum": "5eb63bbbe01eeed093cb22bb8f5acdc3", 
-    "mode": "0744", 
-    "owner": "root", 
-    "secontext": "unconfined_u:object_r:admin_home_t:s0", 
-    "size": 11, 
-    "src": "/root/.ansible/tmp/ansible-tmp-1545406826.61-2027016378642/source", 
-    "state": "file", 
+    "changed": true,
+    "checksum": "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed",
+    "dest": "/tmp/passwd",
+    "gid": 0,
+    "group": "root",
+    "md5sum": "5eb63bbbe01eeed093cb22bb8f5acdc3",
+    "mode": "0744",
+    "owner": "root",
+    "secontext": "unconfined_u:object_r:admin_home_t:s0",
+    "size": 11,
+    "src": "/root/.ansible/tmp/ansible-tmp-1545406826.61-2027016378642/source",
+    "state": "file",
     "uid": 0
 }
 
@@ -256,19 +256,19 @@ ansible all -k -m copy -a 'content="hello world" dest=/tmp/passwd mode=744'
 ansible all -k -m copy -a 'content="other words" dest=/tmp/passwd backup=yes'
 
 127.0.0.1 | CHANGED => {
-    "backup_file": "/tmp/passwd.20894.2018-12-21@23:42:32~", 
-    "changed": true, 
-    "checksum": "a805a4164f7b71cb87def3304723f651e4a10b40", 
-    "dest": "/tmp/passwd", 
-    "gid": 0, 
-    "group": "root", 
-    "md5sum": "25c6d97753b3cb3fae751cc0faed7449", 
-    "mode": "0744", 
-    "owner": "root", 
-    "secontext": "unconfined_u:object_r:admin_home_t:s0", 
-    "size": 11, 
-    "src": "/root/.ansible/tmp/ansible-tmp-1545406951.72-262319852208374/source", 
-    "state": "file", 
+    "backup_file": "/tmp/passwd.20894.2018-12-21@23:42:32~",
+    "changed": true,
+    "checksum": "a805a4164f7b71cb87def3304723f651e4a10b40",
+    "dest": "/tmp/passwd",
+    "gid": 0,
+    "group": "root",
+    "md5sum": "25c6d97753b3cb3fae751cc0faed7449",
+    "mode": "0744",
+    "owner": "root",
+    "secontext": "unconfined_u:object_r:admin_home_t:s0",
+    "size": 11,
+    "src": "/root/.ansible/tmp/ansible-tmp-1545406951.72-262319852208374/source",
+    "state": "file",
     "uid": 0
 }
 ```
@@ -290,12 +290,12 @@ ansible all -k -m yum -a 'name=sysstat,screen state=installed'
 127.0.0.1 | CHANGED => {
     "ansible_facts": {
         "pkg_mgr": "yum"
-    }, 
-    "changed": true, 
-    "msg": "", 
-    "rc": 0, 
+    },
+    "changed": true,
+    "msg": "",
+    "rc": 0,
     "results": [
-        "sysstat-10.1.5-17.el7.x86_64 providing sysstat is already installed", 
+        "sysstat-10.1.5-17.el7.x86_64 providing sysstat is already installed",
         "Loaded plugins: fastestmirror ... Complete!\n"
     ]
 }
@@ -306,10 +306,10 @@ ansible all -k -m yum -a 'name=screen state=absent'
 127.0.0.1 | CHANGED => {
     "ansible_facts": {
         "pkg_mgr": "yum"
-    }, 
-    "changed": true, 
-    "msg": "", 
-    "rc": 0, 
+    },
+    "changed": true,
+    "msg": "",
+    "rc": 0,
     "results": [
         "Loaded plugins: fastestmirror ... Complete!\n"
     ]
@@ -330,15 +330,15 @@ attributes # 文件特殊属性
 ### 创建目录
 ansible all -k -m file -a 'path=/tmp/test state=directory mode=755'
 127.0.0.1 | CHANGED => {
-    "changed": true, 
-    "gid": 0, 
-    "group": "root", 
-    "mode": "0755", 
-    "owner": "root", 
-    "path": "/tmp/test", 
-    "secontext": "unconfined_u:object_r:user_tmp_t:s0", 
-    "size": 6, 
-    "state": "directory", 
+    "changed": true,
+    "gid": 0,
+    "group": "root",
+    "mode": "0755",
+    "owner": "root",
+    "path": "/tmp/test",
+    "secontext": "unconfined_u:object_r:user_tmp_t:s0",
+    "size": 6,
+    "state": "directory",
     "uid": 0
 }
 
@@ -346,15 +346,15 @@ ansible all -k -m file -a 'path=/tmp/test state=directory mode=755'
 ansible all -k -m file -a 'path=/tmp/test.txt state=touch mode=600'
 
 127.0.0.1 | CHANGED => {
-    "changed": true, 
-    "dest": "/tmp/test.txt", 
-    "gid": 0, 
-    "group": "root", 
-    "mode": "0600", 
-    "owner": "root", 
-    "secontext": "unconfined_u:object_r:user_tmp_t:s0", 
-    "size": 0, 
-    "state": "file", 
+    "changed": true,
+    "dest": "/tmp/test.txt",
+    "gid": 0,
+    "group": "root",
+    "mode": "0600",
+    "owner": "root",
+    "secontext": "unconfined_u:object_r:user_tmp_t:s0",
+    "size": 0,
+    "state": "file",
     "uid": 0
 }
 ```
@@ -381,15 +381,15 @@ state # 状态，默认present表示新建
 ansible all -k -m user -a 'name=some_name state=present createhome=yes'
 
 127.0.0.1 | CHANGED => {
-    "changed": true, 
-    "comment": "", 
-    "create_home": true, 
-    "group": 1002, 
-    "home": "/home/some_name", 
-    "name": "some_name", 
-    "shell": "/bin/bash", 
-    "state": "present", 
-    "system": false, 
+    "changed": true,
+    "comment": "",
+    "create_home": true,
+    "group": 1002,
+    "home": "/home/some_name",
+    "name": "some_name",
+    "shell": "/bin/bash",
+    "state": "present",
+    "system": false,
     "uid": 1002
 }
 
@@ -397,11 +397,11 @@ ansible all -k -m user -a 'name=some_name state=present createhome=yes'
 ansible all -k -m user -a 'name=some_name state=absent remove=yes'
 
 127.0.0.1 | CHANGED => {
-    "changed": true, 
-    "force": false, 
-    "name": "some_name", 
-    "remove": true, 
-    "state": "absent"
+    "changed": true,
+    "force": false,
+    "name": "some_name",
+    "remove": true,
+    "state": "absent
 }
 ```
 
@@ -420,13 +420,13 @@ state # 状态present|absent
 ansible all -k -m cron -a 'minute=0 hour=0 day=* month=* weekday=* name="some_name" job="/usr/sbin/update ntp.server.host"'
 
 127.0.0.1 | CHANGED => {
-    "changed": true, 
-    "envs": [], 
+    "changed": true,
+    "envs": [],
     "jobs": [
         "some_name"
     ]
 }
-[root@localhost ~]# cat /var/spool/cron/root 
+[root@localhost ~]# cat /var/spool/cron/root
 #Ansible: some_name
 0 0 * * * /usr/sbin/update ntp.server.host
 
@@ -434,11 +434,11 @@ ansible all -k -m cron -a 'minute=0 hour=0 day=* month=* weekday=* name="some_na
 ansible all -k -m cron -a 'minute=1 hour=1 day=* month=* weekday=* name="some_name2" job="/usr/sbin/update ntp.server.host" backup=yes'
 
 127.0.0.1 | CHANGED => {
-    "backup_file": "/tmp/crontabMSuhoJ", 
-    "changed": true, 
-    "envs": [], 
+    "backup_file": "/tmp/crontabMSuhoJ",
+    "changed": true,
+    "envs": [],
     "jobs": [
-        "some_name", 
+        "some_name",
         "some_name2"
     ]
 }
@@ -447,8 +447,8 @@ ansible all -k -m cron -a 'minute=1 hour=1 day=* month=* weekday=* name="some_na
 ansible all -k -m cron -a 'name="some_name" state=absent'
 
 127.0.0.1 | CHANGED => {
-    "changed": true, 
-    "envs": [], 
+    "changed": true,
+    "envs": [],
     "jobs": [
         "some_name2"
     ]
@@ -480,10 +480,10 @@ mode # 同步模式push|pull，默认推送push
 ansible all -k -m synchronize -a 'src=/etc/sysconfig/network-scripts/ifcfg-ens33 dest=/tmp/iface.cfg'
 
 127.0.0.1 | CHANGED => {
-    "changed": true, 
-    "cmd": "/usr/bin/rsync --delay-updates -F --compress --archive --out-format=<<CHANGED>>%i %n%L /etc/sysconfig/network-scripts/ifcfg-ens33 /tmp/iface.cfg", 
-    "msg": ">f+++++++++ ifcfg-ens33\n", 
-    "rc": 0, 
+    "changed": true,
+    "cmd": "/usr/bin/rsync --delay-updates -F --compress --archive --out-format=<<CHANGED>>%i %n%L /etc/sysconfig/network-scripts/ifcfg-ens33 /tmp/iface.cfg",
+    "msg": ">f+++++++++ ifcfg-ens33\n",
+    "rc": 0,
     "stdout_lines": [
         ">f+++++++++ ifcfg-ens33"
     ]
@@ -493,16 +493,16 @@ ansible all -k -m synchronize -a 'src=/etc/sysconfig/network-scripts/ifcfg-ens33
 ansible all -m synchronize -a 'src=/etc/sysconfig/network-scripts/ dest=/tmp/iface.d/ compress=yes delete=yes rsync_opts=--no-motd,--exclude=ifdown*,--exclude=ifup*,--delete-excluded'
 
 127.0.0.1 | CHANGED => {
-    "changed": true, 
-    "cmd": "/usr/bin/rsync --delay-updates -F --compress --delete-after --archive --no-motd --exclude=ifdown* --exclude=ifup* --delete-excluded --out-format=<<CHANGED>>%i %n%L /etc/sysconfig/network-scripts/ /tmp/iface.d/", 
-    "msg": "cd+++++++++ ./\n>f+++++++++ ifcfg-ens33\n>f+++++++++ ifcfg-lo\n>f+++++++++ init.ipv6-global\n>f+++++++++ network-functions\n>f+++++++++ network-functions-ipv6\n", 
-    "rc": 0, 
+    "changed": true,
+    "cmd": "/usr/bin/rsync --delay-updates -F --compress --delete-after --archive --no-motd --exclude=ifdown* --exclude=ifup* --delete-excluded --out-format=<<CHANGED>>%i %n%L /etc/sysconfig/network-scripts/ /tmp/iface.d/",
+    "msg": "cd+++++++++ ./\n>f+++++++++ ifcfg-ens33\n>f+++++++++ ifcfg-lo\n>f+++++++++ init.ipv6-global\n>f+++++++++ network-functions\n>f+++++++++ network-functions-ipv6\n",
+    "rc": 0,
     "stdout_lines": [
-        "cd+++++++++ ./", 
-        ">f+++++++++ ifcfg-ens33", 
-        ">f+++++++++ ifcfg-lo", 
-        ">f+++++++++ init.ipv6-global", 
-        ">f+++++++++ network-functions", 
+        "cd+++++++++ ./",
+        ">f+++++++++ ifcfg-ens33",
+        ">f+++++++++ ifcfg-lo",
+        ">f+++++++++ init.ipv6-global",
+        ">f+++++++++ network-functions",
         ">f+++++++++ network-functions-ipv6"
     ]
 }
@@ -526,7 +526,7 @@ echo hello world
 
 127.0.0.1 | CHANGED | rc=0 >>
 
-[root@localhost ~]# cat /tmp/some.log 
+[root@localhost ~]# cat /tmp/some.log
 hello world
 
 ### 创建目录
@@ -554,9 +554,9 @@ state # 状态started|stopped|restarted|reloaded
 ansible all -m service -a 'name=httpd state=restarted'
 
 127.0.0.1 | CHANGED => {
-    "changed": true, 
-    "name": "httpd", 
-    "state": "started", 
+    "changed": true,
+    "name": "httpd",
+    "state": "started",
     "status": {
         "ActiveEnterTimestampMonotonic": "0", ...
 }
@@ -567,9 +567,9 @@ ansible all -m service -a 'name=network args=eth0 state=restarted'
  [WARNING]: Ignoring "args" as it is not used in "systemd"
 
 127.0.0.1 | CHANGED => {
-    "changed": true, 
-    "name": "network", 
-    "state": "started", 
+    "changed": true,
+    "name": "network",
+    "state": "started",
     "status": {
 }
 
@@ -577,9 +577,9 @@ ansible all -m service -a 'name=network args=eth0 state=restarted'
 ansible all -m systemd -a 'name=crond enabled=yes'
 
 127.0.0.1 | SUCCESS => {
-    "changed": false, 
-    "enabled": true, 
-    "name": "crond", 
+    "changed": false,
+    "enabled": true,
+    "name": "crond",
     "status": {
 }
 ```
@@ -614,14 +614,14 @@ handler # 定义task后需要调用的任务
     - name: t1
       yum: name=nginx state=installed
 
-[root@localhost ~]# ansible-playbook a.yaml 
+[root@localhost ~]# ansible-playbook a.yaml
 PLAY [all] ******************************************************************************************
 TASK [Gathering Facts] ******************************************************************************
 ok: [127.0.0.1]
 TASK [t1] *******************************************************************************************
 ok: [127.0.0.1]
 PLAY RECAP ******************************************************************************************
-127.0.0.1                  : ok=2    changed=0    unreachable=0    failed=0   
+127.0.0.1                  : ok=2    changed=0    unreachable=0    failed=0
 
 ### 判断/安装/启动nginx
 - hosts: all
@@ -644,7 +644,7 @@ ok: [127.0.0.1]
 TASK [t1] *******************************************************************************************
 ok: [127.0.0.1]
 PLAY RECAP ******************************************************************************************
-127.0.0.1                  : ok=2    changed=0    unreachable=0    failed=0   
+127.0.0.1                  : ok=2    changed=0    unreachable=0    failed=0
 
 ### 检测文件更新
 - hosts: all
@@ -666,7 +666,7 @@ changed: [127.0.0.1]
 RUNNING HANDLER [source sysctl] *********************************************************************
 changed: [127.0.0.1]
 PLAY RECAP ******************************************************************************************
-127.0.0.1                  : ok=3    changed=2    unreachable=0    failed=0   
+127.0.0.1                  : ok=3    changed=2    unreachable=0    failed=0
 
 ### 创建用户
 - hosts: all
@@ -687,7 +687,7 @@ changed: [127.0.0.1] => (item=te1)
 changed: [127.0.0.1] => (item=te2)
 changed: [127.0.0.1] => (item=te3)
 PLAY RECAP ******************************************************************************************
-127.0.0.1                  : ok=2    changed=1    unreachable=0    failed=0   
+127.0.0.1                  : ok=2    changed=1    unreachable=0    failed=0
 
 ### template文件，判断/安装/修改
 # ansible hosts

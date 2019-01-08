@@ -39,7 +39,7 @@ ui界面dashboard，Horizon，openstack各服务的web管理门户，用户简�
 
 ### 环境
 
-https://docs.openstack.org/install-guide/openstack-services.html
+<https://docs.openstack.org/install-guide/openstack-services.html>
 
 两台服务器，node1为控制节点，node2为计算节点。控制节点主要用于操控计算节点，主要配置服务包括mysql/rabbitmq/apache/horizon/keystone/glance/nova(api,cert,schedule,consoleauth,conductor,novncproxy)/neutron(server/linuxbridge-agent)/cinder(api,schedule,volume)/可选GFS分布式存储等；计算节点为创建虚拟机的资源池，主要配置服务包括nova(nova-compute,libvirt,kvm)/neutron(linuxbridge-agent)等
 
@@ -47,7 +47,7 @@ https://docs.openstack.org/install-guide/openstack-services.html
 
 ### 服务安装
 
-https://docs.openstack.org/install-guide/index.html # 文档
+<https://docs.openstack.org/install-guide/index.html> # 文档
 
 ```bash
 ## node1 控制节点
@@ -94,7 +94,7 @@ rabbitmq-plugins enable rabbitmq_management # 监听15672
 
 # 配置keystone
 ID=`openssl rand -hex 10`;echo $ID # 基于openssl生成随机数并设置为admin_token
-vim /etc/keystone/keystone.conf 
+vim /etc/keystone/keystone.conf
 [default]
 admin_token=$ID
 [database]

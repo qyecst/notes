@@ -23,6 +23,7 @@
 apache：`./configure --prefix=path/to/apache --enable-so --enable-rewrite --enable-charset-lite --enable-cgi [.etc]`
 
 php：
+
 ```bash
 ./configure --prefix=path/to/php --with-zlib --with-apxs2=path/to/apache/bin/apxs --with-mysql=path/to/mysql --with-config-file-path=/usr/local/php --enable-mbstring --enable-fpm [.etc]
 

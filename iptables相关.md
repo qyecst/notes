@@ -18,6 +18,30 @@
 
 ![iptables表和链](_pic/iptablesxg/iptables表和链.png)
 
+netfilter提供5个钩子供程序注册：
+
+NF_IP_PRE_ROUTING: 数据流量进入网络栈时触发，钩子上注册的模块在路由决策前执行
+
+NF_IP_LOCAL_IN: 路由判断发送本机时执行
+
+NF_IP_FORWARD: 路由判断需要转发给其他主机时执行
+
+NF_IP_LOCAL_OUT: 本机产生的数据送到网络栈时执行
+
+NF_IP_POST_ROUTING: 数据包经路由判断后即将发送到网络前执行
+
+iptables有5表/5链：
+
+raw: 为iptables提供了不经过状态追踪的机制
+
+mangle: 用于修改数据信息，如ttl，包标记等
+
+nat: 进行地址转换时使用
+
+filter: 进行过滤等操作
+
+security: 提供在数据包中加入selinux特性的功能
+
 ## 连接追踪
 
 ```bash
@@ -84,7 +108,11 @@ iptables -t nat -A POSTROUTING -o eth_out -j SNAT --to-source 1.1.1.2-1.1.1.20
 # 2.2.2.2 == 1.1.1.1 ==|== 1.1.1.2 # 访问2.2.2.2:1111为访问1.1.1.2:80
 iptables -t nat -A PREROUTING -d 2.2.2.2 -p tcp -m tcp --dport 1111 -j DNAT --to-destination 1.1.1.2:80
 iptables -t nat -A POSTROUTING -d 1.1.1.2 -p tcp -m tcp --dport 80 -j SNAT --to-source 1.1.1.1
+
+# 类似SNAT，但是使用网卡的地址，在dhcp等环境下有优势
+iptables -t nat -I POSTROUTING -s 2.2.2.0/24 -j MASQUERADE
 ```
+
 ### 示例命令
 
 ```bash

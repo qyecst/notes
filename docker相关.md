@@ -350,7 +350,7 @@ RUN update-java-alternatives -s java-8-oracle && \
 WORKDIR /root
 # CMD 命令设置容器启动后默认执行的命令及其参数，但能被`docker run`命令后面的命令行参数替换
 # ENTRYPOINT 命令设置容器启动时的执行命令，一定会被执行，即使`docker run`时指定了其他命令
-# CMD echo "Hello world" 或 ENTRYPOINT ["/bin/echo", "Hello"] 
+# CMD echo "Hello world" 或 ENTRYPOINT ["/bin/echo", "Hello"]
 CMD ["java", "-jar", "ide-backend.jar", "--PTY_LIB_FOLDER=/root/lib"]
 ```
 
