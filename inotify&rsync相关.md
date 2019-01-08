@@ -1,6 +1,6 @@
 <!--
 {
-    "title": "inotify&rsync实时同步",
+    "title": "inotify&rsync相关",
     "create": "2018-12-21 01:37:33",
     "modify": "2018-12-21 01:37:33",
     "tag": [
