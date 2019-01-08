@@ -31,12 +31,13 @@
     "zabbix相关.md": "0x0000001e",
     "shell相关.md": "0x0000001f",
     "linux常用命令.md": "0x00000020",
-    "inotify&rsync实时同步.md": "0x00000021",
+    "inotify&rsync相关.md": "0x00000021",
     "puppet相关.md": "0x00000022",
     "ansible相关.md": "0x00000023",
     "jenkins相关.md": "0x00000024",
     "keepalived相关.md": "0x00000025",
     "haproxy相关.md": "0x00000026",
     "lvs相关.md": "0x00000027",
-    "openstack相关.md": "0x00000028"
+    "openstack相关.md": "0x00000028",
+    "iptables相关.md": "0x00000029"
 }
