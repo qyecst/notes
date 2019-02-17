@@ -39,5 +39,6 @@
     "haproxy相关.md": "0x00000026",
     "lvs相关.md": "0x00000027",
     "openstack相关.md": "0x00000028",
-    "iptables相关.md": "0x00000029"
+    "iptables相关.md": "0x00000029",
+    "vhd安装系统.md": "0x0000002a"
 }
