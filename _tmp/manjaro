@@ -1,0 +1,114 @@
+/etc/grub.d/40_custom
+menuentry "Manjaro ISO" --class dvd {
+    set isofile="/xmanjaro.iso"
+    set dri="nonfree"
+    search --no-floppy -f --set=root $isofile
+    probe -u $root --set=abc
+    set pqr="/dev/disk/by-uuid/$abc"
+    loopback loop $isofile
+    linux (loop)/boot/vmlinuz-x86_64 img_dev=$pqr img_loop=$isofile driver=$dri tz=Asia/Shanghai lang=zh_CN keytable=us
+    initrd (loop)/boot/intel_ucode.img (loop)/boot/initramfs-x86_64.img
+}
+
+update-grub
+
+pacman-mirrors -c China -m rank
+pacman -Syyu
+pacman -S wqy-zenhei wqy-microhei
+reboot
+
+/etc/pacman.conf
+[archlinuxcn]
+SigLevel = Optional TrustedOnly
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
+
+pacman -Syyu
+pacman -S archlinux-keyring
+pacman -S archlinuxcn-keyring
+
+pacman -S fcitx-im
+pacman -S fcitx-qt4
+pacman -S fcitx-configtool
+pacman -S fcitx-sogoupinyin
+
+.pam_environment
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+
+alias ll='ls -lF'
+
+.vimrc
+===========
+"Date: 2018-12-02 20:11:39
+set cursorline
+hi CursorLine cterm=NONE ctermbg=233 ctermfg=NONE
+"set cursorcolumn
+"hi CursorColumn cterm=NONE ctermbg=darkgray ctermfg=white
+set number
+syntax on
+set ruler
+set nocompatible
+set encoding=utf-8
+set nobackup
+set noswapfile
+set showmatch
+set autoindent
+set shiftwidth=4
+set tabstop=4
+set expandtab
+set softtabstop=4
+
+yay -S xrdp xorgxrdp
+
+/etc/X11/Xwrapper.config
+allowed_users=anybody
+needs_root_rights=auto
+
+/etc/pam.d/xrdp-sesman
+auth      include   system-remote-login
+account   include   system-remote-login
+password  include   system-remote-login
+session   include   system-remote-login
+
+.xinitrc
+-local dbus_args=(--sh-syntax --exit-with-session)
++local dbus_args=(--sh-syntax)
+
+/etc/xrdp/sesman.ini
+[Xorg]
+param=Xorg
+param=-config
+param=xrdp/xorg.conf
+param=-noreset
+param=-nolisten
+param=tcp
+-param=-logfile
+-param=.xorgxrdp.%s.log
++#param=-logfile
++#param=.xorgxrdp.%s.log
++#param=-layout
++#param=X11 Server
+
+pacman -S firewalld bash-completion
+systemctl enable sshd xrdp xrdp-sesman firewalld
+systemctl restart sshd xrdp xrdp-sesman firewalld
+
+/etc/systemd/system.conf
+-#DefaultTimeoutStartSec=90s
+-#DefaultTimeoutStopSec=90s
+DefaultTimeoutStartSec=15s
+DefaultTimeoutStopSec=15s
+
+systemctl daemon-reload
+systemctl daemon-reexec
+
+/etc/xrdp/
+openssl req -x509 -newkey rsa:2048 -nodes -keyout key.pem -out cert.pem -days 365
+
+pacman -S xdg-user-dirs-gtk
+export LANG=en_US
+xdg-user-dirs-gtk-update
+export LANG=zh_CN.UTF-8
+
+pacman -Qdtq | pacman -Rs -
