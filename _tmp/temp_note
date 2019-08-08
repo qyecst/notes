@@ -120,3 +120,14 @@ dhcp samba dns apache mysql nginx zabbix squid varnish lvs keepalived elk mq zoo
 
 常用：
 iptables/firewalld ntp/chrony
+
+ssh-keygen -t dsa -f /etc/ssh/ssh_host_ed25519_key -N ''
+ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N ''
+ssh-keygen -t rsa -b 2048 -f /etc/ssh/ssh_host_rsa_key -N ''
+ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -N ''
+
+
+git config --global core.autocrlf false
+git config --global core.safecrlf true
+git config --global user.name <name>
+git config --global user.email <email>
