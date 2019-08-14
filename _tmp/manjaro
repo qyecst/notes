@@ -61,6 +61,10 @@ set softtabstop=4
 
 yay -S xrdp xorgxrdp
 
+libtool --finish /usr/lib/xorg/modules
+libtool --finish /usr/lib/xorg/modules/drivers
+libtool --finish /usr/lib/xorg/modules/input
+
 /etc/X11/Xwrapper.config
 allowed_users=anybody
 needs_root_rights=auto
