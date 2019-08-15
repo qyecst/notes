@@ -17,6 +17,9 @@ pacman -Syyu
 pacman -S wqy-zenhei wqy-microhei
 reboot
 
+autoload -U select-word-style 
+select-word-style bash
+
 /etc/pacman.conf
 [archlinuxcn]
 SigLevel = Optional TrustedOnly
