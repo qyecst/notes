@@ -127,6 +127,7 @@ pacman -Qdtq | pacman -Rs -
 
 yay -S novnc
 pacman -S xorg-server tigervnc
+vncpasswd /etc/vnc.passwd
 
 /etc/X11/xorg.conf.d/10-vnc.conf
 
@@ -140,5 +141,5 @@ Section "Screen"
         Option          "rfbport"               "5900"
         Option          "UseIPv6"               "off"
         Option          "localhost"             "true"
-        Option          "PasswordFile"          "/etc/vnc.pass"
+        Option          "PasswordFile"          "/etc/vnc.passwd"
 EndSection
