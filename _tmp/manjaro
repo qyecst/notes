@@ -124,3 +124,21 @@ xdg-user-dirs-gtk-update
 export LANG=zh_CN.UTF-8
 
 pacman -Qdtq | pacman -Rs -
+
+yay -S novnc
+pacman -S xorg-server tigervnc
+
+/etc/X11/xorg.conf.d/10-vnc.conf
+
+Section "Module"
+        Load            "vnc"
+EndSection
+
+Section "Screen"
+        Identifier      "Vnc Screen"
+        Option          "display"               ":9"
+        Option          "rfbport"               "5900"
+        Option          "UseIPv6"               "off"
+        Option          "localhost"             "true"
+        Option          "PasswordFile"          "/etc/vnc.pass"
+EndSection
