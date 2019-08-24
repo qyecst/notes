@@ -128,6 +128,8 @@ pacman -Qdtq | pacman -Rs -
 yay -S novnc
 pacman -S xorg-server tigervnc
 vncpasswd /etc/vnc.passwd
+openssl req -new -x509 -days 365 -nodes -out /usr/share/novnc/self.pem -keyout /usr/share/novnc/self.pem
+
 
 /etc/X11/xorg.conf.d/10-vnc.conf
 
