@@ -146,3 +146,5 @@ Section "Screen"
         Option          "localhost"             "true"
         Option          "PasswordFile"          "/etc/vnc.passwd"
 EndSection
+
+certbot certonly  -d *.*.cn --manual --preferred-challenges dns --server https://acme-v02.api.letsencrypt.org/directory 
