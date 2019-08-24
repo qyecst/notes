@@ -25,6 +25,11 @@ select-word-style bash
 SigLevel = Optional TrustedOnly
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
 
+[archlinuxcn]
+SigLevel = Optional TrustedOnly
+Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch
+
+
 pacman -Syyu
 pacman -S archlinux-keyring
 pacman -S archlinuxcn-keyring
