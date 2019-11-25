@@ -1,3 +1,4 @@
+```bash
 yum update
 yum install <pkg-name>
 yum search <pkg-name>
@@ -14,3 +15,4 @@ apt upgrade
 apt install <pkg-name>
 apt search <pkg-name>
 apt-file search <cmd-name>
+```
