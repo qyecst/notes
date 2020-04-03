@@ -47,7 +47,7 @@ max_queued_events # 设置inotify实例事件(event)队列可容纳的事件数�
 # inotifywatch 收集被监视的文件系统使用度统计数据
 
 # 测试
-inotifywait -mrq –timefmt '%d/%m/%y %H:%M'–format '%T %w%f %e' -e close_write,modify,delete,create,attrib,move /data
+inotifywait -mrq -timefmt '%d/%m/%y %H:%M'-format '%T %w%f %e' -e close_write,modify,delete,create,attrib,move /data
 
 –timefmt # 时间格式 配合 -format 的 %T 使用 # %y年 %m月 %d日 %H小时 %M分钟
 –format # 输出格式
