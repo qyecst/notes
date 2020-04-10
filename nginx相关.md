@@ -550,6 +550,8 @@ location / {
 
 # nginx.conf | vhosts.conf
 
+rewrite ^(.*) https://$server_name$1 permanent;
+
 # test.com跳转www.test.com
 if ($host = 'test.com') {
     rewrite ^/(.*)$ http://www.test.com/$1 permanent;
