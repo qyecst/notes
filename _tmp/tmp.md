@@ -16,3 +16,11 @@ apt install <pkg-name>
 apt search <pkg-name>
 apt-file search <cmd-name>
 ```
+
+## test
+
+string
+
+<hr style="width:50%" />
+
+string
